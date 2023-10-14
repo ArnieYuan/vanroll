@@ -1,8 +1,8 @@
 {
-	"name": "react-design-editor",
-	"version": "0.0.53",
-	"description": "Design Editor Tools with React.js + ant.design + fabric.js",
-	"main": "dist/react-design-editor.min.js",
+	"name": "vanroll",
+	"version": "0.0.1",
+	"description": "Video presenter with React.js + ant.design + fabric.js",
+	"main": "dist/vanroll.min.js",
 	"typings": "lib/index.d.ts",
 	"files": [
 		"dist",
@@ -13,7 +13,7 @@
 		"build": "npm run clean && webpack --node-env production --config webpack.prod.js && typedoc",
 		"build:lib": "npm run tsc && webpack --node-env production --config webpack.lib.js",
 		"start": "npm install && npm run start:dev",
-		"start:dev": "webpack serve --config webpack.dev.js",
+		"start:dev": "export NODE_OPTIONS=--openssl-legacy-provider; webpack serve --config webpack.dev.js",
 		"serve": "http-server docs -p 4001",
 		"ghpages": "npm run build && node scripts/ghpages",
 		"deploy": "npm run build:lib && npm publish",
@@ -24,7 +24,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/salgum1114/react-design-editor.git"
+		"url": "git+https://github.com/arnieyuan/vanroll.git"
 	},
 	"keywords": [
 		"React.js",
@@ -33,12 +33,12 @@
 		"react-design-editor",
 		"design-tool"
 	],
-	"author": "salgum1114",
+	"author": "arnieyuan",
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/salgum1114/react-design-editor/issues"
+		"url": "https://github.com/arnieyuan/vanroll/issues"
 	},
-	"homepage": "https://salgum1114.github.io/react-design-editor",
+	"homepage": "https://arnieyuan.github.io/vanroll",
 	"peerDependencies": {
 		"animejs": "^3.0.0",
 		"fabric": "^4.6.0",
@@ -53,7 +53,6 @@
 		"echarts": "^4.7.0",
 		"fabric": "^4.6.0",
 		"gifler": "^0.1.0",
-		"honeycomb-grid": "^3.1.7",
 		"i18next": "^19.0.0",
 		"i18next-browser-languagedetector": "^2.2.4",
 		"lodash": "^4.17.10",

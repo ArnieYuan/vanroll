@@ -1,6 +1,6 @@
 {
 	"imagemap": {
-		"imagemap": "Image Map",
+		"imagemap": "Edit",
 		"imagemap-editing-confirm": "The image map contents have been modified. Do you want to do that anyway?",
 		"imagemap-editor": "Image Map Editor",
 		"marker": {
@@ -76,7 +76,7 @@
 		}
 	},
 	"workflow": {
-		"workflow": "Workflow",
+		"workflow": "Record",
 		"workflow-list": "Workflow List",
 		"workflow-editor": "Workflow Editor",
 		"workflow-info": "Workflow Info",
@@ -91,14 +91,8 @@
 		"node-name-required": "Please input node name",
 		"node-description-required": "Please input node description"
 	},
-	"flow": {
-		"flow": "플로우",
-		"list": "플로우 목록",
-		"editor": "플로우 에디터",
-		"info": "플로우 정보"
-	},
-	"hexgrid": {
-		"hexgrid": "HexGrid"
+	"fiber": {
+		"fiber": "Adjust"
 	},
 	"action": {
 		"selection": "Selection mode(Q)",
@@ -217,8 +211,5 @@
 	},
 	"placeholder": {
 		"search-node": "Search a node"
-	},
-	"fiber": {
-		"fiber": "FiberCable"
 	}
 }

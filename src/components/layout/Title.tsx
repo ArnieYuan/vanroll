@@ -23,9 +23,6 @@ class Title extends Component<IProps> {
 	}
 
 	handlers = {
-		goGithub: () => {
-			window.open('https://github.com/salgum1114/react-design-editor');
-		},
 		goDocs: () => {
 			window.open('https://salgum1114.github.io/react-design-editor/docs');
 		},
@@ -46,20 +43,7 @@ class Title extends Component<IProps> {
 				alignItems="center"
 			>
 				<Flex style={{ marginLeft: 8 }} flex="0 1 auto">
-					<span style={{ color: '#fff', fontSize: 24, fontWeight: 500 }}>React Design Editor</span>
-					<Tooltip title={i18next.t('action.go-github')} overlayStyle={{ fontSize: 16 }}>
-						<Button
-							className="rde-action-btn"
-							style={{
-								color: 'white',
-							}}
-							shape="circle"
-							size="large"
-							onClick={this.handlers.goGithub}
-						>
-							<Icon name="github" prefix="fab" size={1.5} />
-						</Button>
-					</Tooltip>
+					<span style={{ color: '#fff', fontSize: 24, fontWeight: 500 }}>VanRoll</span>
 					<Tooltip title={i18next.t('action.go-docs')} overlayStyle={{ fontSize: 16 }}>
 						<Button
 							className="rde-action-btn"
@@ -98,24 +82,20 @@ class Title extends Component<IProps> {
 						<Menu.Item key="imagemap" style={{ color: '#fff' }}>
 							{i18next.t('imagemap.imagemap')}
 						</Menu.Item>
-						<Menu.Item key="workflow" style={{ color: '#fff' }}>
+						<Menu.Item key="record" style={{ color: '#fff' }}>
 							{i18next.t('workflow.workflow')}
 						</Menu.Item>
-						{/* <Menu.Item key="flow" style={{ color: '#fff' }}>{i18n.t('flow.flow')}</Menu.Item> */}
-						{/* <Menu.Item key="hexgrid" style={{ color: '#fff' }}>
-							{i18next.t('hexgrid.hexgrid')}
-						</Menu.Item>
-						<Menu.Item key="fiber" style={{ color: '#fff' }}>
+						<Menu.Item key="adjust" style={{ color: '#fff' }}>
 							{i18next.t('fiber.fiber')}
-						</Menu.Item> */}
+						</Menu.Item>
 					</Menu>
 				</Flex>
 				<Flex flex="1" justifyContent="flex-end">
 					<ins
 						className="adsbygoogle"
 						style={{ display: 'inline-block', width: 600, height: 60 }}
-						data-ad-client="ca-pub-8569372752842198"
-						data-ad-slot="5790685139"
+						data-ad-client=""
+						data-ad-slot=""
 					/>
 				</Flex>
 				<Modal
