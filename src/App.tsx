@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Helmet } from 'react-helmet';
 import Title from './components/layout/Title';
 import FlowContainer from './containers/FlowContainer';
-import { FiberEditor, ImageMapEditor, WorkflowEditor } from './editors';
+import { FiberEditor, ImageMapEditor } from './editors';
 
-type EditorType = 'imagemap' | 'record' | 'adjust';
+type EditorType = 'imagemap' | 'adjust';
 
 interface IState {
 	activeEditor?: EditorType;
@@ -25,8 +25,6 @@ class App extends Component<any, IState> {
 		switch (activeEditor) {
 			case 'imagemap':
 				return <ImageMapEditor />;
-			case 'record':
-				return <WorkflowEditor />;
 			case 'adjust':
 				return <FiberEditor />;
 		}

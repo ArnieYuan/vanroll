@@ -75,22 +75,6 @@
 			"mouse-hover-enabled": "Hover enabled"
 		}
 	},
-	"workflow": {
-		"workflow": "Record",
-		"workflow-list": "Workflow List",
-		"workflow-editor": "Workflow Editor",
-		"workflow-info": "Workflow Info",
-		"workflow-editing-confirm": "Workflow content has been modified. Do you want to do that anyway?",
-		"node-configuration": "Node Configuration",
-		"variables": "Global Parameters",
-		"variables-add": "Add Global Parameters",
-		"variables-modify": "Modify Global Parameters",
-		"virtual-button-execute-failed": "{{name}} execute failed",
-		"virtual-button-execute-success": "{{name}} execute success",
-		"validate-fields-error": "A node with the wrong setting exists.",
-		"node-name-required": "Please input node name",
-		"node-description-required": "Please input node description"
-	},
 	"fiber": {
 		"fiber": "Adjust"
 	},

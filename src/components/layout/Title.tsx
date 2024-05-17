@@ -82,9 +82,6 @@ class Title extends Component<IProps> {
 						<Menu.Item key="imagemap" style={{ color: '#fff' }}>
 							{i18next.t('imagemap.imagemap')}
 						</Menu.Item>
-						<Menu.Item key="record" style={{ color: '#fff' }}>
-							{i18next.t('workflow.workflow')}
-						</Menu.Item>
 						<Menu.Item key="adjust" style={{ color: '#fff' }}>
 							{i18next.t('fiber.fiber')}
 						</Menu.Item>
