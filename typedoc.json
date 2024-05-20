@@ -1,4 +1,4 @@
 {
-    "mode": "file",
-    "out": "docs/docs"
+    "entryPoints": ["src/canvas/index.tsx"],
+    "out": "dist/docs"
 }

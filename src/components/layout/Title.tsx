@@ -24,7 +24,7 @@ class Title extends Component<IProps> {
 
 	handlers = {
 		goDocs: () => {
-			window.open('https://salgum1114.github.io/react-design-editor/docs');
+			window.open('./docs');
 		},
 		showHelp: () => {
 			this.setState({

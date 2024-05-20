@@ -13,9 +13,9 @@ const plugins = [
 	}),
 	new HtmlWebpackPlugin({
 		filename: 'index.html',
-		title: 'React Design Editor',
+		title: 'Vanroll Interactive Presentor',
 		meta: {
-			description: `React Design Editor has started to developed direct manipulation of editable design tools like Powerpoint, We've developed it with react.js, ant.design, fabric.js`,
+			description: ``,
 		},
 	}),
 	new WorkboxPlugin.GenerateSW({
@@ -31,7 +31,7 @@ module.exports = merge(baseConfig, {
 		app: ['core-js/stable', path.resolve(__dirname, 'src/index.tsx')],
 	},
 	output: {
-		path: path.resolve(__dirname, 'docs'),
+		path: path.resolve(__dirname, 'dist'),
 		filename: 'js/[name].[chunkhash:16].js',
 		chunkFilename: 'js/[id].[chunkhash:16].js',
 		publicPath: './',
