@@ -1,5 +1,7 @@
 import React from 'react';
-import { Form, Switch } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Switch } from 'antd';
 import i18n from 'i18next';
 
 export default {

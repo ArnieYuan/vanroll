@@ -1,4 +1,6 @@
-import { Form, Radio } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Radio } from 'antd';
 import i18n from 'i18next';
 import React from 'react';
 

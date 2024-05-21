@@ -1,5 +1,7 @@
 import React from 'react';
-import { Row, Col, Form, Button, Select, Switch, Slider, InputNumber } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Row, Col, Button, Select, Switch, Slider, InputNumber } from 'antd';
 import ColorPicker from '../../../components/common/ColorPicker';
 
 export default {

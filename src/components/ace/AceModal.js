@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Modal, Button, notification } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Modal, Button, notification } from 'antd';
 import Icon from '../icon/Icon';
 import AceEditor from './AceEditor';
 

@@ -1,5 +1,7 @@
 import React from 'react';
-import { Form, Radio, Row, Col, Switch } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Radio, Row, Col, Switch } from 'antd';
 import UrlModal from '../../../components/common/UrlModal';
 import FileUpload from '../../../components/common/FileUpload';
 

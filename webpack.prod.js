@@ -46,7 +46,7 @@ module.exports = merge(baseConfig, {
 					warnings: false,
 					compress: {
 						warnings: false,
-						unused: true, // tree shaking(export된 모듈 중 사용하지 않는 모듈은 포함하지않음)
+						unused: true, // tree shaking
 					},
 					ecma: 6,
 					mangle: true,

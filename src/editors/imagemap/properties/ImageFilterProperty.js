@@ -1,5 +1,7 @@
 import React from 'react';
-import { Row, Col, Form, Tag, Slider } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Row, Col, Tag, Slider } from 'antd';
 import i18n from 'i18next';
 
 export default {

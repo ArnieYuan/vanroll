@@ -1,5 +1,7 @@
 import React from 'react';
-import { Form, Input, Slider, Col, InputNumber, Row } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Input, Slider, Col, InputNumber, Row } from 'antd';
 
 export default {
 	render(canvasRef, form, data) {

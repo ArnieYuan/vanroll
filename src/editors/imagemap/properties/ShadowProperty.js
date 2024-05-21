@@ -1,5 +1,7 @@
 import React from 'react';
-import { Form, Slider, Switch } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Slider, Switch } from 'antd';
 import i18n from 'i18next';
 
 import ColorPicker from '../../../components/common/ColorPicker';

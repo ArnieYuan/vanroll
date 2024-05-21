@@ -1,5 +1,7 @@
 import React from 'react';
-import { Form, Input, Slider, Switch, Col, InputNumber, Row } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Input, Slider, Switch, Col, InputNumber, Row } from 'antd';
 import i18n from 'i18next';
 
 export default {

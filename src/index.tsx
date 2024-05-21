@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
-import { LocaleProvider } from 'antd';
+import { ConfigProvider } from 'antd';
 import koKR from 'antd/lib/locale-provider/ko_KR';
 import enUS from 'antd/lib/locale-provider/en_US';
 import App from './App';
@@ -24,9 +24,9 @@ const render = Component => {
 	const rootElement = document.getElementById('root');
 	ReactDom.render(
 		<AppContainer>
-			<LocaleProvider locale={antResources[i18next.language]}>
+			<ConfigProvider locale={antResources[i18next.language]}>
 				<Component />
-			</LocaleProvider>
+			</ConfigProvider>
 		</AppContainer>,
 		rootElement,
 	);

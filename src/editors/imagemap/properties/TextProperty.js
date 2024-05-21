@@ -1,5 +1,7 @@
 import React from 'react';
-import { Form, Slider, Col, Select, Tag } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Slider, Col, Select, Tag } from 'antd';
 import sortBy from 'lodash/sortBy';
 
 import Icon from '../../../components/icon/Icon';
