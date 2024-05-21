@@ -10,7 +10,7 @@
 	],
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"build": "npm run clean && webpack --node-env production --config webpack.prod.js && typedoc",
+		"build": "npm run clean && webpack --node-env production --config webpack.prod.js",
 		"start": "npm install && npm run start:dev",
 		"start:dev": "webpack serve --open --config webpack.dev.js",
 		"serve": "http-server dist -p 4001",
