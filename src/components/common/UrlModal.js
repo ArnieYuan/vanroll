@@ -83,7 +83,7 @@ class UrlModal extends Component {
 						initialValue: url || '',
 					})(<span style={{ wordBreak: 'break-all' }}>{url}</span>)}
 				</Form.Item>
-				<Modal onCancel={onCancel} onOk={onOk} visible={visible}>
+				<Modal onCancel={onCancel} onOk={onOk} open={visible}>
 					<Form.Item label={i18n.t('common.url')} colon={false}>
 						<Input
 							defaultValue={url}

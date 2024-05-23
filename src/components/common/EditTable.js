@@ -195,7 +195,7 @@ class EditTable extends Component {
 					columns={columns}
 					dataSource={this.getDataSource(userProperty)}
 				/>
-				<Modal onCancel={onCancel} onOk={onOk} visible={visible}>
+				<Modal onCancel={onCancel} onOk={onOk} open={visible}>
 					<Form.Item
 						required
 						label={i18n.t('common.key')}

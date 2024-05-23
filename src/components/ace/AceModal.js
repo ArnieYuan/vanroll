@@ -104,7 +104,7 @@ class AceModal extends Component {
 						initialValue: js || '',
 					})(<pre style={{ wordBreak: 'break-all', lineHeight: '1.2em' }}>{js}</pre>)}
 				</Form.Item>
-				<Modal onCancel={onCancel} onOk={onOk} visible={visible} width="80%">
+				<Modal onCancel={onCancel} onOk={onOk} open={visible} width="80%">
 					<AceEditor
 						ref={(c) => {
 							this.aceRef = c;

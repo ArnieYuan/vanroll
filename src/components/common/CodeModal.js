@@ -82,7 +82,7 @@ class CodeModal extends Component {
 						initialValue: code || this.props.value,
 					})(<pre style={{ wordBreak: 'break-all', lineHeight: '1.2em' }}>{code}</pre>)}
 				</Form.Item>
-				<Modal onCancel={onCancel} onOk={onOk} visible={visible}>
+				<Modal onCancel={onCancel} onOk={onOk} open={visible}>
 					<Form.Item label={codeLabel} colon={false}>
 						<ReactAce
 							ref={c => {

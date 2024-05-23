@@ -73,7 +73,7 @@ class SVGModal extends Component {
 				closable
 				onCancel={this.handleCancel}
 				onOk={this.handleOk}
-				visible={visible}
+				open={visible}
 			>
 				<Form colon={false}>
 					<Form.Item label={i18n.t('common.type')}>

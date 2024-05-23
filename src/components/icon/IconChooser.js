@@ -129,7 +129,7 @@ class IconChooser extends Component {
 					onOk={onOk}
 					onCancel={onCancel}
 					width="80%"
-					visible={visible}
+					open={visible}
 					title={title}
 					bodyStyle={{ margin: 16, overflowY: 'auto', height: '600px' }}
 				>

@@ -72,7 +72,7 @@ const Title = () => {
 				</Menu>
 			</Flex>
 			<Modal
-				visible={visible}
+				open={visible}
 				onCancel={handlers.hideHelp}
 				closable={true}
 				footer={null}

@@ -46,7 +46,7 @@ class DataSourceModal extends Component {
 		const { form, visible, animation, onOk, onCancel, validateTitle, onChange } = this.props;
 		const { width, height } = this.state;
 		return (
-			<Modal onOk={onOk} onCancel={onCancel} visible={visible}>
+			<Modal onOk={onOk} onCancel={onCancel} open={visible}>
 				<Form.Item
 					label="Title"
 					required
