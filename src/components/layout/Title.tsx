@@ -1,112 +1,87 @@
 import { Button, Menu, Modal, Tooltip } from 'antd';
-import { ClickParam } from 'antd/lib/menu';
 import i18next from 'i18next';
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Flex } from '../flex';
 import { ShortcutHelp } from '../help';
 import Icon from '../icon/Icon';
+import { Link, useLocation } from 'react-router-dom';
 
-interface IProps {
-	onChangeEditor: (param: ClickParam) => void;
-	currentEditor: string;
-}
+const Title = () => {
+	const [visible, setVisible] = useState(false);
+	const location = useLocation();
 
-class Title extends Component<IProps> {
-	state = {
-		visible: false,
-	};
-
-	componentDidMount() {
-		if (globalThis) {
-			(globalThis.adsbygoogle = globalThis.adsbygoogle || []).push({});
-		}
-	}
-
-	handlers = {
+	const handlers = {
 		goDocs: () => {
 			window.open('./docs');
 		},
 		showHelp: () => {
-			this.setState({
-				visible: true,
-			});
+			setVisible(true);
 		},
+		hideHelp: () => { setVisible(false); },
 	};
 
-	render() {
-		const { visible } = this.state;
-		return (
-			<Flex
-				style={{ background: 'linear-gradient(141deg,#23303e,#404040 51%,#23303e 75%)' }}
-				flexWrap="wrap"
-				flex="1"
-				alignItems="center"
-			>
-				<Flex style={{ marginLeft: 8 }} flex="0 1 auto">
-					<span style={{ color: '#fff', fontSize: 24, fontWeight: 500 }}>VanRoll</span>
-					<Tooltip title={i18next.t('action.go-docs')} overlayStyle={{ fontSize: 16 }}>
-						<Button
-							className="rde-action-btn"
-							style={{
-								color: 'white',
-							}}
-							shape="circle"
-							size="large"
-							onClick={this.handlers.goDocs}
-						>
-							<Icon name="book" prefix="fas" size={1.5} />
-						</Button>
-					</Tooltip>
-					<Tooltip title={i18next.t('action.shortcut-help')} overlayStyle={{ fontSize: 16 }}>
-						<Button
-							className="rde-action-btn"
-							style={{
-								color: 'white',
-							}}
-							shape="circle"
-							size="large"
-							onClick={this.handlers.showHelp}
-						>
-							<Icon name="question" prefix="fas" size={1.5} />
-						</Button>
-					</Tooltip>
-				</Flex>
-				<Flex style={{ marginLeft: 88 }}>
-					<Menu
-						mode="horizontal"
-						theme="dark"
-						style={{ background: 'transparent', fontSize: '16px' }}
-						onClick={this.props.onChangeEditor}
-						selectedKeys={[this.props.currentEditor]}
+	return (
+		<Flex
+			style={{ background: 'linear-gradient(141deg,#23303e,#404040 51%,#23303e 75%)' }}
+			flexWrap="wrap"
+			flex="1"
+			alignItems="center"
+		>
+			<Flex style={{ marginLeft: 8 }} flex="0 1 auto">
+				<span style={{ color: '#fff', fontSize: 24, fontWeight: 500 }}>VanRoll</span>
+				<Tooltip title={i18next.t('action.go-docs')} overlayStyle={{ fontSize: 16 }}>
+					<Button
+						className="rde-action-btn"
+						style={{
+							color: 'white',
+						}}
+						shape="circle"
+						size="large"
+						onClick={handlers.goDocs}
 					>
-						<Menu.Item key="imagemap" style={{ color: '#fff' }}>
-							{i18next.t('imagemap.imagemap')}
-						</Menu.Item>
-						<Menu.Item key="adjust" style={{ color: '#fff' }}>
-							{i18next.t('fiber.fiber')}
-						</Menu.Item>
-					</Menu>
-				</Flex>
-				<Flex flex="1" justifyContent="flex-end">
-					<ins
-						className="adsbygoogle"
-						style={{ display: 'inline-block', width: 600, height: 60 }}
-						data-ad-client=""
-						data-ad-slot=""
-					/>
-				</Flex>
-				<Modal
-					visible={visible}
-					onCancel={() => this.setState({ visible: false })}
-					closable={true}
-					footer={null}
-					width="50%"
-				>
-					<ShortcutHelp />
-				</Modal>
+						<Icon name="book" prefix="fas" size={1.5} />
+					</Button>
+				</Tooltip>
+				<Tooltip title={i18next.t('action.shortcut-help')} overlayStyle={{ fontSize: 16 }}>
+					<Button
+						className="rde-action-btn"
+						style={{
+							color: 'white',
+						}}
+						shape="circle"
+						size="large"
+						onClick={handlers.showHelp}
+					>
+						<Icon name="question" prefix="fas" size={1.5} />
+					</Button>
+				</Tooltip>
 			</Flex>
-		);
-	}
+			<Flex style={{ marginLeft: 88 }}>
+				<Menu
+					mode="horizontal"
+					theme="dark"
+					style={{ background: 'transparent', fontSize: '16px' }}
+					selectedKeys={[location.pathname]}
+				>
+					<Menu.Item key="/edit" style={{ color: '#fff' }}>
+						<Link to="/edit">{i18next.t('imagemap.imagemap')}</Link>
+					</Menu.Item>
+					<Menu.Item key="/adjust" style={{ color: '#fff' }}>
+						<Link to="/adjust">{i18next.t('fiber.fiber')}</Link>
+					</Menu.Item>
+				</Menu>
+			</Flex>
+			<Modal
+				visible={visible}
+				onCancel={handlers.hideHelp}
+				closable={true}
+				footer={null}
+				width="50%"
+			>
+				<ShortcutHelp />
+			</Modal>
+		</Flex>
+	);
 }
 
 export default Title;
