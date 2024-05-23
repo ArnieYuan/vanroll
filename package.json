@@ -63,8 +63,7 @@
 		"react-router-dom": "^6.23.1",
 		"resize-observer-polyfill": "^1.5.1",
 		"store": "^2.0.12",
-		"uuid": "^7.0.3",
-		"uuidv4": "^6.2.8",
+		"uuid": "^9.0.1",
 		"warning": "^4.0.3"
 	},
 	"devDependencies": {

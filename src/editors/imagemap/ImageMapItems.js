@@ -9,7 +9,7 @@ import Icon from '../../components/icon/Icon';
 import Scrollbar from '../../components/common/Scrollbar';
 import CommonButton from '../../components/common/CommonButton';
 import { SVGModal } from '../../components/common';
-import { uuid } from 'uuidv4';
+import { v4 as uuid } from 'uuid';
 
 notification.config({
 	top: 80,
