@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import Title from './components/layout/Title';
-import FlowContainer from './containers/FlowContainer';
+import ModeContext from './contexts/ModeContext';
 import { FiberEditor, ImageMapEditor } from './editors';
 
 function App() {
@@ -25,8 +25,8 @@ function App() {
 					<Title />
 				</div>
 				<Routes>
-					<Route path="/edit" element={<FlowContainer><div className="rde-content"><ImageMapEditor /></div></FlowContainer>} />
-					<Route path="/adjust" element={<FlowContainer><div className="rde-content"><FiberEditor /></div></FlowContainer>} />
+					<Route path="/edit" element={<ModeContext.Provider><div className="rde-content"><ImageMapEditor /></div></ModeContext.Provider>} />
+					<Route path="/adjust" element={<ModeContext.Provider><div className="rde-content"><FiberEditor /></div></ModeContext.Provider>} />
 				</Routes>
 			</Router>
 		</div>
