@@ -26,7 +26,7 @@ function App() {
 				</div>
 				<Routes>
 					<Route path="/edit" element={<ModeContext.Provider><div className="rde-content"><ImageMapEditor /></div></ModeContext.Provider>} />
-					<Route path="/adjust" element={<ModeContext.Provider><div className="rde-content"><FiberEditor /></div></ModeContext.Provider>} />
+					<Route path="/present" element={<ModeContext.Provider><div className="rde-content"><FiberEditor /></div></ModeContext.Provider>} />
 				</Routes>
 			</Router>
 		</div>

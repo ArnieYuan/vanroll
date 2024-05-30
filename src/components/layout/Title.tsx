@@ -66,8 +66,8 @@ const Title = () => {
 					<Menu.Item key="/edit" style={{ color: '#fff' }}>
 						<Link to="/edit">{i18next.t('imagemap.imagemap')}</Link>
 					</Menu.Item>
-					<Menu.Item key="/adjust" style={{ color: '#fff' }}>
-						<Link to="/adjust">{i18next.t('fiber.fiber')}</Link>
+					<Menu.Item key="/present" style={{ color: '#fff' }}>
+						<Link to="/present">{i18next.t('fiber.fiber')}</Link>
 					</Menu.Item>
 				</Menu>
 			</Flex>
