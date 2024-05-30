@@ -24,7 +24,6 @@ const propertiesToInclude = [
 	'link',
 	'tooltip',
 	'animation',
-	'layout',
 	'workareaWidth',
 	'workareaHeight',
 	'videoLoadType',
@@ -337,10 +336,6 @@ class ImageMapEditor extends Component {
 			this.canvasRef.current.handler.set(changedKey, changedValue);
 		},
 		onChangeWokarea: (changedKey, changedValue, allValues) => {
-			if (changedKey === 'layout') {
-				this.canvasRef.current.handler.workareaHandler.setLayout(changedValue);
-				return;
-			}
 			if (changedKey === 'file' || changedKey === 'src') {
 				this.canvasRef.current.handler.workareaHandler.setImage(changedValue);
 				return;

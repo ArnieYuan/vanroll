@@ -19,11 +19,11 @@ import ChartProperty from './ChartProperty';
 export default {
 	map: {
 		map: {
-			title: 'Map',
+			title: 'Workarea',
 			component: MapProperty,
 		},
 		image: {
-			title: 'Image',
+			title: 'Background',
 			component: ImageProperty,
 		},
 	},

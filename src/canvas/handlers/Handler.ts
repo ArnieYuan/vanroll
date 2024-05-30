@@ -3,27 +3,27 @@ import { union } from 'lodash';
 import { v4 as uuid } from 'uuid';
 import warning from 'warning';
 import {
-    AlignmentHandler,
-    AnimationHandler,
-    ChartHandler,
-    ContextmenuHandler,
-    CropHandler,
-    CustomHandler,
-    DrawingHandler,
-    ElementHandler,
-    EventHandler,
-    GridHandler,
-    GuidelineHandler,
-    ImageHandler,
-    InteractionHandler,
-    LinkHandler,
-    NodeHandler,
-    PortHandler,
-    ShortcutHandler,
-    TooltipHandler,
-    TransactionHandler,
-    WorkareaHandler,
-    ZoomHandler,
+	AlignmentHandler,
+	AnimationHandler,
+	ChartHandler,
+	ContextmenuHandler,
+	CropHandler,
+	CustomHandler,
+	DrawingHandler,
+	ElementHandler,
+	EventHandler,
+	GridHandler,
+	GuidelineHandler,
+	ImageHandler,
+	InteractionHandler,
+	LinkHandler,
+	NodeHandler,
+	PortHandler,
+	ShortcutHandler,
+	TooltipHandler,
+	TransactionHandler,
+	WorkareaHandler,
+	ZoomHandler,
 } from '.';
 import CanvasObject from '../CanvasObject';
 import { defaults } from '../constants';
@@ -31,20 +31,20 @@ import { LinkObject } from '../objects/Link';
 import { NodeObject } from '../objects/Node';
 import { PortObject } from '../objects/Port';
 import {
-    CanvasOption,
-    FabricCanvas,
-    FabricElement,
-    FabricGroup,
-    FabricImage,
-    FabricObject,
-    FabricObjectOption,
-    FabricObjects,
-    GridOption,
-    GuidelineOption,
-    InteractionMode,
-    KeyEvent,
-    WorkareaObject,
-    WorkareaOption,
+	CanvasOption,
+	FabricCanvas,
+	FabricElement,
+	FabricGroup,
+	FabricImage,
+	FabricObject,
+	FabricObjectOption,
+	FabricObjects,
+	GridOption,
+	GuidelineOption,
+	InteractionMode,
+	KeyEvent,
+	WorkareaObject,
+	WorkareaOption,
 } from '../utils';
 import { LinkOption } from './LinkHandler';
 import { TransactionEvent } from './TransactionHandler';
@@ -734,10 +734,6 @@ class Handler implements HandlerOptions {
 			option.editable = false;
 		} else {
 			option.editable = editable;
-		}
-		if (editable && this.workarea.layout === 'fullscreen') {
-			option.scaleX = this.workarea.scaleX;
-			option.scaleY = this.workarea.scaleY;
 		}
 		const newOption = Object.assign(
 			{},
@@ -1539,7 +1535,7 @@ class Handler implements HandlerOptions {
 			prevLeft = workarea.left;
 			prevTop = workarea.top;
 			this.workarea.set(workarea);
-			await this.workareaHandler.setImage(workarea.src, true);
+			await this.workareaHandler.setImage(workarea.src);
 			this.workarea.setCoords();
 		} else {
 			this.canvas.centerObject(this.workarea);
@@ -1551,22 +1547,11 @@ class Handler implements HandlerOptions {
 			if (obj.id === 'workarea') {
 				return;
 			}
-			const canvasWidth = this.canvas.getWidth();
-			const canvasHeight = this.canvas.getHeight();
-			const { width, height, scaleX, scaleY, layout, left, top } = this.workarea;
-			if (layout === 'fullscreen') {
-				const leftRatio = canvasWidth / (width * scaleX);
-				const topRatio = canvasHeight / (height * scaleY);
-				obj.left *= leftRatio;
-				obj.top *= topRatio;
-				obj.scaleX *= leftRatio;
-				obj.scaleY *= topRatio;
-			} else {
-				const diffLeft = left - prevLeft;
-				const diffTop = top - prevTop;
-				obj.left += diffLeft;
-				obj.top += diffTop;
-			}
+			const { left, top } = this.workarea;
+			const diffLeft = left - prevLeft;
+			const diffTop = top - prevTop;
+			obj.left += diffLeft;
+			obj.top += diffTop;
 			if (obj.superType === 'element') {
 				obj.id = uuid();
 			}

@@ -569,75 +569,30 @@ class EventHandler {
 		const diffHeight = nextHeight / 2 - this.handler.height / 2;
 		this.handler.width = nextWidth;
 		this.handler.height = nextHeight;
-		if (this.handler.workarea.layout === 'fixed') {
-			this.handler.canvas.centerObject(this.handler.workarea);
-			this.handler.workarea.setCoords();
-			if (this.handler.gridOption.enabled) {
-				return;
-			}
-			this.handler.canvas.getObjects().forEach((obj: FabricObject) => {
-				if (obj.id !== 'workarea') {
-					const left = obj.left + diffWidth;
-					const top = obj.top + diffHeight;
-					obj.set({
-						left,
-						top,
-					});
-					obj.setCoords();
-					if (obj.superType === 'element') {
-						const { id } = obj;
-						const el = this.handler.elementHandler.findById(id);
-						// update the element
-						this.handler.elementHandler.setPosition(el, obj);
-					}
-				}
-			});
-			this.handler.canvas.requestRenderAll();
+		this.handler.canvas.centerObject(this.handler.workarea);
+		this.handler.workarea.setCoords();
+		if (this.handler.gridOption.enabled) {
 			return;
 		}
-		if (this.handler.workarea.layout === 'responsive') {
-			const { scaleX } = this.handler.workareaHandler.calculateScale();
-			const center = this.handler.canvas.getCenter();
-			const deltaPoint = new fabric.Point(diffWidth, diffHeight);
-			this.handler.canvas.relativePan(deltaPoint);
-			this.handler.zoomHandler.zoomToPoint(new fabric.Point(center.left, center.top), scaleX);
-			return;
-		}
-		const scaleX = nextWidth / this.handler.workarea.width;
-		const scaleY = nextHeight / this.handler.workarea.height;
-		const diffScaleX = nextWidth / (this.handler.workarea.width * this.handler.workarea.scaleX);
-		const diffScaleY = nextHeight / (this.handler.workarea.height * this.handler.workarea.scaleY);
-		this.handler.workarea.set({
-			scaleX,
-			scaleY,
-		});
-		this.handler.canvas.getObjects().forEach((obj: any) => {
-			const { id } = obj;
+		this.handler.canvas.getObjects().forEach((obj: FabricObject) => {
 			if (obj.id !== 'workarea') {
-				const left = obj.left * diffScaleX;
-				const top = obj.top * diffScaleY;
-				const newScaleX = obj.scaleX * diffScaleX;
-				const newScaleY = obj.scaleY * diffScaleY;
+				const left = obj.left + diffWidth;
+				const top = obj.top + diffHeight;
 				obj.set({
-					scaleX: newScaleX,
-					scaleY: newScaleY,
 					left,
 					top,
 				});
 				obj.setCoords();
 				if (obj.superType === 'element') {
-					const video = obj as VideoObject;
-					const { width, height } = obj;
+					const { id } = obj;
 					const el = this.handler.elementHandler.findById(id);
-					this.handler.elementHandler.setSize(el, obj);
-					if (video.player) {
-						video.player.setPlayerSize(width, height);
-					}
+					// update the element
 					this.handler.elementHandler.setPosition(el, obj);
 				}
 			}
 		});
-		this.handler.canvas.renderAll();
+		this.handler.canvas.requestRenderAll();
+		return;
 	};
 
 	/**
