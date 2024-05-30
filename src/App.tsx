@@ -6,6 +6,8 @@ import ModeContext from './contexts/ModeContext';
 import { FiberEditor, ImageMapEditor } from './editors';
 
 function App() {
+	const basename = process.env.REACT_APP_BASENAME || '';
+
 	return (
 		<div className="rde-main">
 			<Helmet>
@@ -20,7 +22,7 @@ function App() {
 				<link rel="stylesheet" href="https://fonts.googleapis.com/earlyaccess/notosanskr.css" />
 				<title>Vanroll - Interactive Video Presenter</title>
 			</Helmet>
-			<Router>
+			<Router basename={basename}>
 				<div className="rde-title">
 					<Title />
 				</div>

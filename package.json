@@ -10,11 +10,11 @@
 	],
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"build": "npm run clean && webpack --node-env production --config webpack.prod.js",
+		"build": "npm run clean && webpack --config webpack.prod.js",
 		"start": "npm install && npm run start:dev",
 		"start:dev": "webpack serve --open --config webpack.dev.js",
 		"serve": "http-server dist -p 4001",
-		"ghpages": "npm run build && node scripts/ghpages",
+		"ghpages": "npm run clean && webpack --config webpack.ghpages.js && node scripts/ghpages",
 		"lint": "npm run tsc",
 		"clean": "node scripts/clean",
 		"tsc": "tsc",

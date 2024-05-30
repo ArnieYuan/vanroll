@@ -8,6 +8,9 @@ const WorkboxPlugin = require('workbox-webpack-plugin');
 const baseConfig = require('./webpack.common.js');
 
 const plugins = [
+	new webpack.EnvironmentPlugin({
+		NODE_ENV: 'production',
+	}),
 	new webpack.LoaderOptionsPlugin({
 		minimize: true,
 	}),
