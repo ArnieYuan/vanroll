@@ -17,7 +17,6 @@ declare module 'fabric/fabric-impl' {
 	class Link {}
 	class CurvedLink {}
 	class OrthogonalLink {}
-	class Cube {}
 	// SVG
 	class Svg {}
 
