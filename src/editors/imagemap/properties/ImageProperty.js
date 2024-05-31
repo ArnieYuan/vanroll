@@ -1,6 +1,4 @@
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Radio } from 'antd';
+import { Form, Radio } from 'antd';
 import i18n from 'i18next';
 import React from 'react';
 
@@ -9,40 +7,30 @@ import UrlModal from '../../../components/common/UrlModal';
 
 export default {
 	render(canvasRef, form, data) {
-		const { getFieldDecorator } = form;
 		if (!data) {
 			return null;
 		}
-		const imageLoadType = data.imageLoadType || 'file';
+		const fileRules = [
+			{
+				required: true,
+				message: i18n.t('validation.enter-property', { arg: i18n.t('common.file') }),
+			},
+		];
 		return (
 			<React.Fragment>
-				<Form.Item label={i18n.t('imagemap.image.image-load-type')} colon={false}>
-					{getFieldDecorator('imageLoadType', {
-						initialValue: imageLoadType,
-					})(
-						<Radio.Group size="small">
-							<Radio.Button value="file">{i18n.t('imagemap.image.file-upload')}</Radio.Button>
-							<Radio.Button value="src">{i18n.t('imagemap.image.image-url')}</Radio.Button>
-						</Radio.Group>,
-					)}
+				<Form.Item name='imageLoadType' label={i18n.t('imagemap.image.image-load-type')} colon={false}>
+					<Radio.Group size="small">
+						<Radio.Button value="file">{i18n.t('imagemap.image.file-upload')}</Radio.Button>
+						<Radio.Button value="src">{i18n.t('imagemap.image.image-url')}</Radio.Button>
+					</Radio.Group>
 				</Form.Item>
-				{imageLoadType === 'file' ? (
-					<Form.Item label={i18n.t('common.file')} colon={false}>
-						{getFieldDecorator('file', {
-							rules: [
-								{
-									required: true,
-									message: i18n.t('validation.enter-property', { arg: i18n.t('common.file') }),
-								},
-							],
-							initialValue: data.file,
-						})(<FileUpload accept="image/*" limit={100} />)}
+				{form.getFieldValue('imageLoadType') === 'file' ? (
+					<Form.Item name='file' label={i18n.t('common.file')} rules={fileRules} colon={false}>
+						<FileUpload accept="image/*" limit={100} />
 					</Form.Item>
 				) : (
-					<Form.Item>
-						{getFieldDecorator('src', {
-							initialValue: data.src,
-						})(<UrlModal form={form} />)}
+					<Form.Item name='src'>
+						<UrlModal form={form} />
 					</Form.Item>
 				)}
 			</React.Fragment>
