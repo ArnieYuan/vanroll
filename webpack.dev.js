@@ -1,7 +1,6 @@
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const baseConfig = require('./webpack.common.js');
 
 const devPort = 4000;
@@ -48,9 +47,5 @@ module.exports = merge(baseConfig, {
 	},
 	plugins: [
 		new webpack.HotModuleReplacementPlugin(),
-		new HtmlWebpackPlugin({
-			filename: 'index.html',
-			title: 'Vanroll Interactive Presentor',
-		}),
 	],
 });

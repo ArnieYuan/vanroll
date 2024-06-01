@@ -1,7 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
 const merge = require('webpack-merge');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 
@@ -13,13 +12,6 @@ const plugins = [
 	}),
 	new webpack.LoaderOptionsPlugin({
 		minimize: true,
-	}),
-	new HtmlWebpackPlugin({
-		filename: 'index.html',
-		title: 'Vanroll Interactive Presentor',
-		meta: {
-			description: ``,
-		},
 	}),
 	new WorkboxPlugin.GenerateSW({
 		skipWaiting: true,
