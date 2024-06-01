@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Tabs } from 'antd';
+import { ProductOutlined, PictureOutlined, PlaySquareOutlined, FormatPainterOutlined} from '@ant-design/icons';
 import classnames from 'classnames';
 
 import NodeProperties from './properties/NodeProperties';
@@ -8,11 +9,10 @@ import MapProperties from './properties/MapProperties';
 import Animations from './animations/Animations';
 import Styles from './styles/Styles';
 import DataSources from './datasources/DataSources';
-import Icon from '../../components/icon/Icon';
 import CommonButton from '../../components/common/CommonButton';
 
-class ImageMapConfigurations extends Component {
-	static propTypes = {
+const ImageMapConfigurations = (props) => {
+	ImageMapConfigurations.propTypes = {
 		canvasRef: PropTypes.any,
 		selectedItem: PropTypes.object,
 		onChange: PropTypes.func,
@@ -24,75 +24,79 @@ class ImageMapConfigurations extends Component {
 		dataSources: PropTypes.array,
 	};
 
-	state = {
-		activeKey: 'map',
-	};
+	const [activeKey, setActiveKey] = useState('map');
+	const [collapse, setCollapse] = useState(false);
 
-	handlers = {
+	const handlers = {
 		onChangeTab: activeKey => {
-			this.setState({
-				activeKey,
-			});
+			setActiveKey(activeKey);
 		},
 		onCollapse: () => {
-			this.setState({
-				collapse: !this.state.collapse,
-			});
+			setCollapse(!collapse);
 		},
 	};
 
-	render() {
-		const {
-			onChange,
-			selectedItem,
-			canvasRef,
-			animations,
-			styles,
-			dataSources,
-			onChangeAnimations,
-			onChangeStyles,
-			onChangeDataSources,
-		} = this.props;
-		const { collapse, activeKey } = this.state;
-		const { onChangeTab, onCollapse } = this.handlers;
-		const className = classnames('rde-editor-configurations', {
-			minimize: collapse,
-		});
-		return (
-			<div className={className}>
-				<CommonButton
-					className="rde-action-btn"
-					shape="circle"
-					icon={collapse ? 'angle-double-left' : 'angle-double-right'}
-					onClick={onCollapse}
-					style={{ position: 'absolute', top: 16, right: 16, zIndex: 1000 }}
-				/>
-				<Tabs
-					tabPosition="right"
-					style={{ height: '100%' }}
-					activeKey={activeKey}
-					onChange={onChangeTab}
-					tabBarStyle={{ marginTop: 60 }}
-				>
-					<Tabs.TabPane tab={<Icon name="cog" />} key="map">
-						<MapProperties onChange={onChange} canvasRef={canvasRef} />
-					</Tabs.TabPane>
-					<Tabs.TabPane tab={<Icon name="cogs" />} key="node">
-						<NodeProperties onChange={onChange} selectedItem={selectedItem} canvasRef={canvasRef} />
-					</Tabs.TabPane>
-					<Tabs.TabPane tab={<Icon name="vine" prefix="fab" />} key="animations">
-						<Animations animations={animations} onChangeAnimations={onChangeAnimations} />
-					</Tabs.TabPane>
-					<Tabs.TabPane tab={<Icon name="star-half-alt" />} key="styles">
-						<Styles styles={styles} onChangeStyles={onChangeStyles} />
-					</Tabs.TabPane>
-					{/* <Tabs.TabPane tab={<Icon name="table" />} key="datasources">
-                        <DataSources ref={(c) => { this.dataSourcesRef = c; }} dataSources={dataSources} onChangeDataSources={onChangeDataSources} />
-                    </Tabs.TabPane> */}
-				</Tabs>
-			</div>
-		);
-	}
+	const {
+		onChange,
+		selectedItem,
+		canvasRef,
+		animations,
+		styles,
+		dataSources,
+		onChangeAnimations,
+		onChangeStyles,
+		onChangeDataSources,
+	} = props;
+
+	// TODO: fix the too many rerenders error with the commented code.
+	// if (selectedItem) {
+	// 	setActiveKey('node');
+	// }
+
+	const className = classnames('rde-editor-configurations', {
+		minimize: collapse,
+	});
+	const items = [
+		{
+			label: <ProductOutlined />,
+			key: 'map', children: <MapProperties onChange={onChange} canvasRef={canvasRef} />
+		},
+		{
+			label: <PictureOutlined />,
+			key: 'node',
+			chilren: <NodeProperties onChange={onChange} selectedItem={selectedItem} canvasRef={canvasRef} />
+		},
+		{
+			label: <PlaySquareOutlined />,
+			key: 'animations',
+			children: <Animations animations={animations} onChangeAnimations={onChangeAnimations} />
+		},
+		{
+			label: <FormatPainterOutlined />,
+			key: 'styles',
+			children: <Styles styles={styles} onChangeStyles={onChangeStyles} />
+		},
+		// { label: <Icon name="table" />, key: 'datasources', children: <DataSources ref={(c) => { this.dataSourcesRef = c; }} dataSources={dataSources} onChangeDataSources={onChangeDataSources} /> },
+	];
+	return (
+		<div className={className}>
+			<CommonButton
+				className="rde-action-btn"
+				shape="circle"
+				icon={collapse ? 'angle-double-left' : 'angle-double-right'}
+				onClick={handlers.onCollapse}
+				style={{ position: 'absolute', top: 16, right: 16, zIndex: 1000 }}
+			/>
+			<Tabs
+				items={items}
+				tabPosition="right"
+				style={{ height: '100%' }}
+				defaultActiveKey={activeKey}
+				onChange={handlers.onChangeTab}
+				tabBarStyle={{ marginTop: 60 }}
+			/>
+		</div>
+	);
 }
 
 export default ImageMapConfigurations;
