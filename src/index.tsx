@@ -1,6 +1,5 @@
 import React from 'react';
-import ReactDom from 'react-dom';
-import { AppContainer } from 'react-hot-loader';
+import ReactDOM from 'react-dom';
 import { ConfigProvider } from 'antd';
 import koKR from 'antd/lib/locale-provider/ko_KR';
 import enUS from 'antd/lib/locale-provider/en_US';
@@ -20,26 +19,12 @@ const root = document.createElement('div');
 root.id = 'root';
 document.body.appendChild(root);
 
-const render = Component => {
-	const rootElement = document.getElementById('root');
-	ReactDom.render(
-		<AppContainer>
-			<ConfigProvider locale={antResources[i18next.language]}>
-				<Component />
-			</ConfigProvider>
-		</AppContainer>,
-		rootElement,
-	);
-};
-
 i18nClient();
 
-render(App);
+ReactDOM.render(
+	<ConfigProvider locale={antResources[i18next.language]}>
+		<App />
+	</ConfigProvider >,
+	document.getElementById('root'));
 
 register();
-
-if (module.hot) {
-	module.hot.accept('./App', () => {
-		render(App);
-	});
-}

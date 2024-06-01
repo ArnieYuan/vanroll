@@ -1,3 +1,4 @@
+import { hot } from 'react-hot-loader/root'; // before React
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Title from './components/layout/Title';
@@ -22,4 +23,4 @@ function App() {
 	);
 }
 
-export default App;
+export default hot(App);
