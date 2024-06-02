@@ -3,7 +3,8 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Title from './components/layout/Title';
 import ModeContext from './contexts/ModeContext';
-import { FiberEditor, ImageMapEditor } from './editors';
+import { ImageMapEditor } from './editors';
+import Presenter from './presenter';
 
 function App() {
 	const basename = process.env.REACT_APP_BASENAME || '';
@@ -15,8 +16,8 @@ function App() {
 					<Title />
 				</div>
 				<Routes>
-					<Route path="/edit" element={<ModeContext.Provider><div className="rde-content"><ImageMapEditor /></div></ModeContext.Provider>} />
-					<Route path="/present" element={<ModeContext.Provider><div className="rde-content"><FiberEditor /></div></ModeContext.Provider>} />
+					<Route path="/edit" element={<ModeContext.Provider value="edit"><div className="rde-content"><ImageMapEditor /></div></ModeContext.Provider>} />
+					<Route path="/present" element={<ModeContext.Provider value="present"><div className="rde-content"><Presenter /></div></ModeContext.Provider>} />
 				</Routes>
 			</Router>
 		</div>
