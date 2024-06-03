@@ -56,8 +56,8 @@ const Title = () => {
 					style={{ background: 'transparent', fontSize: '16px', flex: 'auto' }}
 					selectedKeys={[location.pathname]}
 					items={[
-						{ label: <Link to="/edit">{i18next.t('imagemap.imagemap')}</Link>, key: '/edit' },
-						{ label: <Link to="/present">{i18next.t('present.present')}</Link>, key: '/present' }
+						{ label: <Link to="/edit">{i18next.t('action.edit')}</Link>, key: '/edit' },
+						{ label: <Link to="/present">{i18next.t('action.present')}</Link>, key: '/present' }
 					]}
 				/>
 			</Flex>

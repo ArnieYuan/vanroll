@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Menu, Layout, Modal } from 'antd';
 import i18next from 'i18next';
 import logo from '../../../public/favicon-32x32.png'
@@ -7,14 +8,19 @@ import { ShortcutHelp } from '../../components/help';
 const ImageMapTitle = (props) => {
 	const { canvasRef, action } = props;
 	const [visible, setVisible] = useState(false);
+	const navigate = useNavigate();
 	const items = [
-		{ label: 'File', key: 'fileSubmenu', children: [
-			{ label: i18next.t('action.upload'), key: 'upload'},
-			{ label: i18next.t('action.download'), key: 'download'}
-		] },
 		{
-			label: 'Help',
-			key: 'helpSubmenu',
+			label: 'File', key: 'fileSubmenu',
+			children: [
+				{ label: i18next.t('action.upload'), key: 'upload' },
+				{ label: i18next.t('action.download'), key: 'download' },
+				{ label: i18next.t('action.exit'), key: 'exit' }
+			]
+		},
+		{ label: i18next.t('action.present'), key: 'present' },
+		{
+			label: 'Help', key: 'helpSubmenu',
 			children: [
 				{ label: i18next.t('action.help'), key: 'help' },
 				{ label: i18next.t('action.go-docs'), key: 'docs' }
@@ -36,6 +42,12 @@ const ImageMapTitle = (props) => {
 		}
 		if (e.key === 'help') {
 			handlers.showHelp();
+		}
+		if (e.key === 'exit') {
+			navigate('/');
+		}
+		if (e.key === 'present') {
+			navigate('/present');
 		}
 	};
 	return (
