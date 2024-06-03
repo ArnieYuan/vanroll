@@ -1,23 +1,17 @@
-import { Button, Menu, Modal, Tooltip } from 'antd';
+import { Button, Menu, Tooltip } from 'antd';
 import i18next from 'i18next';
-import React, { useState } from 'react';
+import React from 'react';
 import { Flex } from '../flex';
-import { ShortcutHelp } from '../help';
 import Icon from '../icon/Icon';
 import { Link, useLocation } from 'react-router-dom';
 
 const Title = () => {
-	const [visible, setVisible] = useState(false);
 	const location = useLocation();
 
 	const handlers = {
 		goDocs: () => {
 			window.open('./docs');
 		},
-		showHelp: () => {
-			setVisible(true);
-		},
-		hideHelp: () => { setVisible(false); },
 	};
 
 	return (
@@ -50,7 +44,6 @@ const Title = () => {
 						}}
 						shape="circle"
 						size="large"
-						onClick={handlers.showHelp}
 					>
 						<Icon name="question" prefix="fas" size={1.5} />
 					</Button>
@@ -60,26 +53,14 @@ const Title = () => {
 				<Menu
 					mode="horizontal"
 					theme="dark"
-					style={{ background: 'transparent', fontSize: '16px' }}
+					style={{ background: 'transparent', fontSize: '16px', flex: 'auto' }}
 					selectedKeys={[location.pathname]}
-				>
-					<Menu.Item key="/edit" style={{ color: '#fff' }}>
-						<Link to="/edit">{i18next.t('imagemap.imagemap')}</Link>
-					</Menu.Item>
-					<Menu.Item key="/present" style={{ color: '#fff' }}>
-						<Link to="/present">{i18next.t('fiber.fiber')}</Link>
-					</Menu.Item>
-				</Menu>
+					items={[
+						{ label: <Link to="/edit">{i18next.t('imagemap.imagemap')}</Link>, key: '/edit' },
+						{ label: <Link to="/present">{i18next.t('present.present')}</Link>, key: '/present' }
+					]}
+				/>
 			</Flex>
-			<Modal
-				open={visible}
-				onCancel={handlers.hideHelp}
-				closable={true}
-				footer={null}
-				width="50%"
-			>
-				<ShortcutHelp />
-			</Modal>
 		</Flex>
 	);
 }

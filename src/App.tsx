@@ -12,12 +12,10 @@ function App() {
 	return (
 		<div className="rde-main">
 			<Router basename={basename}>
-				<div className="rde-title">
-					<Title />
-				</div>
 				<Routes>
-					<Route path="/edit" element={<ModeContext.Provider value="edit"><div className="rde-content"><ImageMapEditor /></div></ModeContext.Provider>} />
-					<Route path="/present" element={<ModeContext.Provider value="present"><div className="rde-content"><Presenter /></div></ModeContext.Provider>} />
+					<Route path="/" element={<div className="rde-title"><Title /></div>} />
+					<Route path="/edit" element={<ModeContext.Provider value="edit"><ImageMapEditor /></ModeContext.Provider>} />
+					<Route path="/present" element={<ModeContext.Provider value="present"><Presenter /></ModeContext.Provider>} />
 				</Routes>
 			</Router>
 		</div>
