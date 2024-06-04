@@ -26,17 +26,23 @@ const NodeProperties = (props) => {
 		}
 	}, [props.selectedItem]);
 	const initialValues = {
-		locked: selectedItem.locked,
-		visible: selectedItem.visible,
-		name: selectedItem.name || '',
-		width: selectedItem.width * selectedItem.scaleX,
-		height: selectedItem.height * selectedItem.scaleY,
-		left: selectedItem.left,
-		top: selectedItem.top,
+		'shadow.blur': selectedItem.shadow.blur || 15,
+		'shadow.color': selectedItem.shadow.color || 'rgba(0, 0, 0, 0)',
+		'shadow.enabled': 'enabled',
+		'shadow.offsetX': selectedItem.shadow.offsetX || 10,
+		'shadow.offsetY': selectedItem.shadow.offsetY || 10,
 		angle: selectedItem.angle,
-		imageLoadType: workarea.imageLoadType || 'file',
 		file: workarea.file,
-		src: workarea.src
+		height: selectedItem.height * selectedItem.scaleY,
+		icon: selectedItem.icon,
+		imageLoadType: workarea.imageLoadType || 'file',
+		left: selectedItem.left,
+		locked: selectedItem.locked,
+		name: selectedItem.name || '',
+		src: workarea.src,
+		top: selectedItem.top,
+		visible: selectedItem.visible,
+		width: selectedItem.width * selectedItem.scaleX,
 	};
 	const onValuesChange = (changedValues, allValues) => {
 		onChange(selectedItem, changedValues, allValues);

@@ -43,3 +43,19 @@ export const angleRules = [
         message: 'Please input rotation',
     },
 ];
+
+export const shadowBlurRules =[
+    {
+        type: 'number',
+        min: 0,
+        max: 100,
+    },
+];
+
+export const shadowOffsetRules = [
+    {
+        type: 'number',
+        min: 0,
+        max: 100,
+    },
+];
