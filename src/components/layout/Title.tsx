@@ -3,15 +3,19 @@ import i18next from 'i18next';
 import React from 'react';
 import { Flex } from '../flex';
 import Icon from '../icon/Icon';
-import { Link, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const Title = () => {
 	const location = useLocation();
+	const navigate = useNavigate();
 
 	const handlers = {
 		goDocs: () => {
 			window.open('./docs');
 		},
+		onClick: (e) => {
+			navigate(e.key);
+		}
 	};
 
 	return (
@@ -55,9 +59,10 @@ const Title = () => {
 					theme="dark"
 					style={{ background: 'transparent', fontSize: '16px', flex: 'auto' }}
 					selectedKeys={[location.pathname]}
+					onClick={handlers.onClick}
 					items={[
-						{ label: <Link to="/edit">{i18next.t('action.edit')}</Link>, key: '/edit' },
-						{ label: <Link to="/present">{i18next.t('action.present')}</Link>, key: '/present' }
+						{ label: i18next.t('action.edit'), key: '/edit' },
+						{ label: i18next.t('action.present'), key: '/present' }
 					]}
 				/>
 			</Flex>
