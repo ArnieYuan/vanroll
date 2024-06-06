@@ -6,7 +6,7 @@ import logo from '../../../public/favicon-32x32.png'
 import { ShortcutHelp } from '../../components/help';
 
 const ImageMapTitle = (props) => {
-	const { canvasRef, action } = props;
+	const { dispatch } = props;
 	const [visible, setVisible] = useState(false);
 	const navigate = useNavigate();
 	const items = [
@@ -15,6 +15,7 @@ const ImageMapTitle = (props) => {
 			children: [
 				{ label: i18next.t('action.upload'), key: 'upload' },
 				{ label: i18next.t('action.download'), key: 'download' },
+				{ label: i18next.t('action.image-save'), key: 'image-save' },
 				{ label: i18next.t('action.exit'), key: 'exit' }
 			]
 		},
@@ -37,17 +38,21 @@ const ImageMapTitle = (props) => {
 		hideHelp: () => { setVisible(false); },
 	};
 	const onClick = (e) => {
-		if (e.key === 'docs') {
-			handlers.goDocs();
-		}
-		if (e.key === 'help') {
-			handlers.showHelp();
-		}
-		if (e.key === 'exit') {
-			navigate('/');
-		}
-		if (e.key === 'present') {
-			navigate('/present');
+		switch (e.key) {
+			case 'docs':
+				handlers.goDocs();
+				return;
+			case 'help':
+				handlers.showHelp();
+				return;
+			case 'exit':
+				navigate('/');
+				return;
+			case 'present':
+				navigate('/present');
+				return;
+			default:
+				dispatch({ type: e.key });
 		}
 	};
 	return (

@@ -1,7 +1,7 @@
 import { Badge, Button, Menu, Popconfirm } from 'antd';
 import i18n from 'i18next';
 import debounce from 'lodash/debounce';
-import React, { Component, createRef } from 'react';
+import React, { useEffect, useRef, useReducer, useState } from 'react';
 import Canvas from '../../canvas/Canvas';
 import CommonButton from '../../components/common/CommonButton';
 import { Content } from '../../components/layout';
@@ -72,119 +72,85 @@ const defaultOption = {
 	},
 };
 
-class ImageMapEditor extends Component {
-	state = {
-		selectedItem: null,
-		zoomRatio: 1,
-		preview: false,
-		loading: false,
-		progress: 0,
-		animations: [],
-		styles: [],
-		dataSources: [],
-		editing: false,
-		descriptors: {},
-		objects: undefined,
-	};
+const ImageMapEditor = (props) => {
+	const [selectedItem, setSelectedItem] = useState(null);
+	const [zoomRatio, setZoomRatio] = useState(1);
+	const [preview, setPreview] = useState(false);
+	const [loading, showLoading] = useState(false);
+	const [progress, setProgress] = useState(0);
+	const [animations, setAnimations] = useState([]);
+	const [styles, setStyles] = useState([]);
+	const [dataSources, setDataSources] = useState([]);
+	const [descriptors, setDescriptors] = useState({});
+	// Only used by preview
+	const [objects, setObjects] = useState([]);
+	const canvasRef = useRef();
+	const itemsRef = useRef();
 
-	canvasRef = createRef();
-	itemsRef = createRef();
-
-	componentDidMount() {
-		this.showLoading(true);
+	useEffect(() => {
+		showLoading(true);
 		import('./Descriptors.json').then(descriptors => {
-			this.setState(
-				{
-					descriptors,
-				},
-				() => {
-					this.showLoading(false);
-				},
-			);
+			setDescriptors(descriptors);
+			setSelectedItem(null);
+			showLoading(false);
 		});
-		this.setState({
-			selectedItem: null,
-		});
-	}
+	}, []);
 
-	canvasHandlers = {
+	const canvasHandlers = {
 		onAdd: target => {
-			const { editing } = this.state;
-			this.forceUpdate();
-			if (!editing) {
-				this.changeEditing(true);
-			}
+			// this.forceUpdate();
 			if (target.type === 'activeSelection') {
-				this.canvasHandlers.onSelect(null);
+				canvasHandlers.onSelect(null);
 				return;
 			}
-			this.canvasRef.current.handler.select(target);
+			canvasRef.current.handler.select(target);
 		},
 		onSelect: target => {
-			const { selectedItem } = this.state;
 			if (target && target.id && target.id !== 'workarea' && target.type !== 'activeSelection') {
 				if (selectedItem && target.id === selectedItem.id) {
 					return;
 				}
-				this.canvasRef.current.handler.getObjects().forEach(obj => {
+				canvasRef.current.handler.getObjects().forEach(obj => {
 					if (obj) {
-						this.canvasRef.current.handler.animationHandler.resetAnimation(obj, true);
+						canvasRef.current.handler.animationHandler.resetAnimation(obj, true);
 					}
 				});
-				this.setState({
-					selectedItem: target,
-				});
+				setSelectedItem(target);
 				return;
 			}
-			this.canvasRef.current.handler.getObjects().forEach(obj => {
+			canvasRef.current.handler.getObjects().forEach(obj => {
 				if (obj) {
-					this.canvasRef.current.handler.animationHandler.resetAnimation(obj, true);
+					canvasRef.current.handler.animationHandler.resetAnimation(obj, true);
 				}
 			});
-			this.setState({
-				selectedItem: null,
-			});
+			setSelectedItem(null);
 		},
 		onRemove: () => {
-			const { editing } = this.state;
-			if (!editing) {
-				this.changeEditing(true);
-			}
-			this.canvasHandlers.onSelect(null);
+			canvasHandlers.onSelect(null);
 		},
 		onModified: debounce(() => {
-			const { editing } = this.state;
-			this.forceUpdate();
-			if (!editing) {
-				this.changeEditing(true);
-			}
+			// this.forceUpdate();
 		}, 300),
 		onZoom: zoom => {
-			this.setState({
-				zoomRatio: zoom,
-			});
+			setZoomRatio(zoom);
 		},
 		onChange: (selectedItem, changedValues, allValues) => {
-			const { editing } = this.state;
-			if (!editing) {
-				this.changeEditing(true);
-			}
 			const changedKey = Object.keys(changedValues)[0];
 			const changedValue = changedValues[changedKey];
 			if (allValues.workarea) {
-				this.canvasHandlers.onChangeWokarea(changedKey, changedValue, allValues.workarea);
+				canvasHandlers.onChangeWokarea(changedKey, changedValue, allValues.workarea);
 				return;
 			}
 			if (changedKey === 'width' || changedKey === 'height') {
-				this.canvasRef.current.handler.scaleToResize(allValues.width, allValues.height);
+				canvasRef.current.handler.scaleToResize(allValues.width, allValues.height);
 				return;
 			}
 			if (changedKey === 'angle') {
-				this.canvasRef.current.handler.rotate(allValues.angle);
+				canvasRef.current.handler.rotate(allValues.angle);
 				return;
 			}
 			if (changedKey === 'locked') {
-				this.canvasRef.current.handler.setObject({
+				canvasRef.current.handler.setObject({
 					lockMovementX: changedValue,
 					lockMovementY: changedValue,
 					hasControls: !changedValue,
@@ -196,47 +162,47 @@ class ImageMapEditor extends Component {
 			}
 			if (changedKey === 'file' || changedKey === 'src' || changedKey === 'code') {
 				if (selectedItem.type === 'image') {
-					this.canvasRef.current.handler.setImageById(selectedItem.id, changedValue);
+					canvasRef.current.handler.setImageById(selectedItem.id, changedValue);
 				} else if (selectedItem.superType === 'element') {
-					this.canvasRef.current.handler.elementHandler.setById(selectedItem.id, changedValue);
+					canvasRef.current.handler.elementHandler.setById(selectedItem.id, changedValue);
 				}
 				return;
 			}
 			if (changedKey === 'link') {
 				const link = Object.assign({}, defaultOption.link, allValues.link);
-				this.canvasRef.current.handler.set(changedKey, link);
+				canvasRef.current.handler.set(changedKey, link);
 				return;
 			}
 			if (changedKey === 'tooltip') {
 				const tooltip = Object.assign({}, defaultOption.tooltip, allValues.tooltip);
-				this.canvasRef.current.handler.set(changedKey, tooltip);
+				canvasRef.current.handler.set(changedKey, tooltip);
 				return;
 			}
 			if (changedKey === 'animation') {
 				const animation = Object.assign({}, defaultOption.animation, allValues.animation);
-				this.canvasRef.current.handler.set(changedKey, animation);
+				canvasRef.current.handler.set(changedKey, animation);
 				return;
 			}
 			if (changedKey === 'icon') {
 				const { unicode, styles } = changedValue[Object.keys(changedValue)[0]];
 				const uni = parseInt(unicode, 16);
 				if (styles[0] === 'brands') {
-					this.canvasRef.current.handler.set('fontFamily', 'Font Awesome 5 Brands');
+					canvasRef.current.handler.set('fontFamily', 'Font Awesome 5 Brands');
 				} else if (styles[0] === 'regular') {
-					this.canvasRef.current.handler.set('fontFamily', 'Font Awesome 5 Regular');
+					canvasRef.current.handler.set('fontFamily', 'Font Awesome 5 Regular');
 				} else {
-					this.canvasRef.current.handler.set('fontFamily', 'Font Awesome 5 Free');
+					canvasRef.current.handler.set('fontFamily', 'Font Awesome 5 Free');
 				}
-				this.canvasRef.current.handler.set('text', String.fromCodePoint(uni));
-				this.canvasRef.current.handler.set('icon', changedValue);
+				canvasRef.current.handler.set('text', String.fromCodePoint(uni));
+				canvasRef.current.handler.set('icon', changedValue);
 				return;
 			}
 			if (changedKey === 'shadow') {
 				if (allValues.shadow.enabled) {
 					if ('blur' in allValues.shadow) {
-						this.canvasRef.current.handler.setShadow(allValues.shadow);
+						canvasRef.current.handler.setShadow(allValues.shadow);
 					} else {
-						this.canvasRef.current.handler.setShadow({
+						canvasRef.current.handler.setShadow({
 							enabled: true,
 							blur: 15,
 							offsetX: 10,
@@ -244,25 +210,25 @@ class ImageMapEditor extends Component {
 						});
 					}
 				} else {
-					this.canvasRef.current.handler.setShadow(null);
+					canvasRef.current.handler.setShadow(null);
 				}
 				return;
 			}
 			if (changedKey === 'fontWeight') {
-				this.canvasRef.current.handler.set(changedKey, changedValue ? 'bold' : 'normal');
+				canvasRef.current.handler.set(changedKey, changedValue ? 'bold' : 'normal');
 				return;
 			}
 			if (changedKey === 'fontStyle') {
-				this.canvasRef.current.handler.set(changedKey, changedValue ? 'italic' : 'normal');
+				canvasRef.current.handler.set(changedKey, changedValue ? 'italic' : 'normal');
 				return;
 			}
 			if (changedKey === 'textAlign') {
-				this.canvasRef.current.handler.set(changedKey, Object.keys(changedValue)[0]);
+				canvasRef.current.handler.set(changedKey, Object.keys(changedValue)[0]);
 				return;
 			}
 			if (changedKey === 'trigger') {
 				const trigger = Object.assign({}, defaultOption.trigger, allValues.trigger);
-				this.canvasRef.current.handler.set(changedKey, trigger);
+				canvasRef.current.handler.set(changedKey, trigger);
 				return;
 			}
 			if (changedKey === 'filters') {
@@ -270,87 +236,86 @@ class ImageMapEditor extends Component {
 				const filterValue = allValues.filters[filterKey];
 				if (filterKey === 'gamma') {
 					const rgb = [filterValue.r, filterValue.g, filterValue.b];
-					this.canvasRef.current.handler.imageHandler.applyFilterByType(filterKey, changedValue[filterKey].enabled, {
+					canvasRef.current.handler.imageHandler.applyFilterByType(filterKey, changedValue[filterKey].enabled, {
 						gamma: rgb,
 					});
 					return;
 				}
 				if (filterKey === 'brightness') {
-					this.canvasRef.current.handler.imageHandler.applyFilterByType(filterKey, changedValue[filterKey].enabled, {
+					canvasRef.current.handler.imageHandler.applyFilterByType(filterKey, changedValue[filterKey].enabled, {
 						brightness: filterValue.brightness,
 					});
 					return;
 				}
 				if (filterKey === 'contrast') {
-					this.canvasRef.current.handler.imageHandler.applyFilterByType(filterKey, changedValue[filterKey].enabled, {
+					canvasRef.current.handler.imageHandler.applyFilterByType(filterKey, changedValue[filterKey].enabled, {
 						contrast: filterValue.contrast,
 					});
 					return;
 				}
 				if (filterKey === 'saturation') {
-					this.canvasRef.current.handler.imageHandler.applyFilterByType(filterKey, changedValue[filterKey].enabled, {
+					canvasRef.current.handler.imageHandler.applyFilterByType(filterKey, changedValue[filterKey].enabled, {
 						saturation: filterValue.saturation,
 					});
 					return;
 				}
 				if (filterKey === 'hue') {
-					this.canvasRef.current.handler.imageHandler.applyFilterByType(filterKey, changedValue[filterKey].enabled, {
+					canvasRef.current.handler.imageHandler.applyFilterByType(filterKey, changedValue[filterKey].enabled, {
 						rotation: filterValue.rotation,
 					});
 					return;
 				}
 				if (filterKey === 'noise') {
-					this.canvasRef.current.handler.imageHandler.applyFilterByType(filterKey, changedValue[filterKey].enabled, {
+					canvasRef.current.handler.imageHandler.applyFilterByType(filterKey, changedValue[filterKey].enabled, {
 						noise: filterValue.noise,
 					});
 					return;
 				}
 				if (filterKey === 'pixelate') {
-					this.canvasRef.current.handler.imageHandler.applyFilterByType(filterKey, changedValue[filterKey].enabled, {
+					canvasRef.current.handler.imageHandler.applyFilterByType(filterKey, changedValue[filterKey].enabled, {
 						blocksize: filterValue.blocksize,
 					});
 					return;
 				}
 				if (filterKey === 'blur') {
-					this.canvasRef.current.handler.imageHandler.applyFilterByType(filterKey, changedValue[filterKey].enabled, {
+					canvasRef.current.handler.imageHandler.applyFilterByType(filterKey, changedValue[filterKey].enabled, {
 						value: filterValue.value,
 					});
 					return;
 				}
-				this.canvasRef.current.handler.imageHandler.applyFilterByType(filterKey, changedValue[filterKey]);
+				canvasRef.current.handler.imageHandler.applyFilterByType(filterKey, changedValue[filterKey]);
 				return;
 			}
 			if (changedKey === 'chartOption') {
 				try {
 					const sandbox = new SandBox();
 					const compiled = sandbox.compile(changedValue);
-					const { animations, styles } = this.state;
 					const chartOption = compiled(3, animations, styles, selectedItem.userProperty);
 					selectedItem.setChartOptionStr(changedValue);
-					this.canvasRef.current.handler.elementHandler.setById(selectedItem.id, chartOption);
+					canvasRef.current.handler.elementHandler.setById(selectedItem.id, chartOption);
 				} catch (error) {
 					console.error(error);
 				}
 				return;
 			}
-			this.canvasRef.current.handler.set(changedKey, changedValue);
+			canvasRef.current.handler.set(changedKey, changedValue);
 		},
 		onChangeWokarea: (changedKey, changedValue, allValues) => {
 			if (changedKey === 'file' || changedKey === 'src') {
-				this.canvasRef.current.handler.workareaHandler.setImage(changedValue);
+				canvasRef.current.handler.workareaHandler.setImage(changedValue);
 				return;
 			}
 			if (changedKey === 'width' || changedKey === 'height') {
-				this.canvasRef.current.handler.originScaleToResize(
-					this.canvasRef.current.handler.workarea,
+				canvasRef.current.handler.originScaleToResize(
+					canvasRef.current.handler.workarea,
 					allValues.width,
 					allValues.height,
 				);
-				this.canvasRef.current.canvas.centerObject(this.canvasRef.current.handler.workarea);
+				canvasRef.current.canvas.centerObject(canvasRef.current.handler.workarea);
 				return;
 			}
-			this.canvasRef.current.handler.workarea.set(changedKey, changedValue);
-			this.canvasRef.current.canvas.requestRenderAll();
+			canvasRef.current.handler.workarea.set(changedKey, changedValue);
+			canvasRef.current.canvas.requestRenderAll();
 		},
 		onTooltip: (ref, target) => {
 			const value = Math.random() * 10 + 1;
@@ -379,12 +344,12 @@ class ImageMapEditor extends Component {
 				return (
 					<Menu>
 						<Menu.SubMenu key="add" style={{ width: 120 }} title={i18n.t('action.add')}>
-							{this.transformList().map(item => {
+							{transformList().map(item => {
 								const option = Object.assign({}, item.option, { left, top });
 								const newItem = Object.assign({}, item, { option });
 								return (
 									<Menu.Item style={{ padding: 0 }} key={item.name}>
-										{this.itemsRef.current.renderItem(newItem, false)}
+										{itemsRef.current.renderItem(newItem, false)}
 									</Menu.Item>
 								);
 							})}
@@ -397,21 +362,21 @@ class ImageMapEditor extends Component {
 					<Menu>
 						<Menu.Item
 							onClick={() => {
-								this.canvasRef.current.handler.toGroup();
+								canvasRef.current.handler.toGroup();
 							}}
 						>
 							{i18n.t('action.object-group')}
 						</Menu.Item>
 						<Menu.Item
 							onClick={() => {
-								this.canvasRef.current.handler.duplicate();
+								canvasRef.current.handler.duplicate();
 							}}
 						>
 							{i18n.t('action.clone')}
 						</Menu.Item>
 						<Menu.Item
 							onClick={() => {
-								this.canvasRef.current.handler.remove();
+								canvasRef.current.handler.remove();
 							}}
 						>
 							{i18n.t('action.delete')}
@@ -424,21 +389,21 @@ class ImageMapEditor extends Component {
 					<Menu>
 						<Menu.Item
 							onClick={() => {
-								this.canvasRef.current.handler.toActiveSelection();
+								canvasRef.current.handler.toActiveSelection();
 							}}
 						>
 							{i18n.t('action.object-ungroup')}
 						</Menu.Item>
 						<Menu.Item
 							onClick={() => {
-								this.canvasRef.current.handler.duplicate();
+								canvasRef.current.handler.duplicate();
 							}}
 						>
 							{i18n.t('action.clone')}
 						</Menu.Item>
 						<Menu.Item
 							onClick={() => {
-								this.canvasRef.current.handler.remove();
+								canvasRef.current.handler.remove();
 							}}
 						>
 							{i18n.t('action.delete')}
@@ -450,14 +415,14 @@ class ImageMapEditor extends Component {
 				<Menu>
 					<Menu.Item
 						onClick={() => {
-							this.canvasRef.current.handler.duplicateById(target.id);
+							canvasRef.current.handler.duplicateById(target.id);
 						}}
 					>
 						{i18n.t('action.clone')}
 					</Menu.Item>
 					<Menu.Item
 						onClick={() => {
-							this.canvasRef.current.handler.removeById(target.id);
+							canvasRef.current.handler.removeById(target.id);
 						}}
 					>
 						{i18n.t('action.delete')}
@@ -466,65 +431,57 @@ class ImageMapEditor extends Component {
 			);
 		},
 		onTransaction: transaction => {
-			this.forceUpdate();
+			// this.forceUpdate();
 		},
 	};
 
-	handlers = {
+	const handlers = {
 		onChangePreview: checked => {
 			let data;
-			if (this.canvasRef.current) {
-				data = this.canvasRef.current.handler.exportJSON().filter(obj => {
+			if (canvasRef.current) {
+				data = canvasRef.current.handler.exportJSON().filter(obj => {
 					if (!obj.id) {
 						return false;
 					}
 					return true;
 				});
 			}
-			this.setState({
-				preview: typeof checked === 'object' ? false : checked,
-				objects: data,
-			});
+			setPreview(typeof checked === 'object' ? false : checked);
+			setObjects(data);
 		},
-		onProgress: progress => {
-			this.setState({
-				progress,
-			});
-		},
+		onProgress: progress => { setProgress(progress); },
 		onImport: files => {
 			if (files) {
-				this.showLoading(true);
+				showLoading(true);
 				setTimeout(() => {
 					const reader = new FileReader();
 					reader.onprogress = e => {
 						if (e.lengthComputable) {
 							const progress = parseInt((e.loaded / e.total) * 100, 10);
-							this.handlers.onProgress(progress);
+							handlers.onProgress(progress);
 						}
 					};
 					reader.onload = e => {
 						const { objects, animations, styles, dataSources } = JSON.parse(e.target.result);
-						this.setState({
-							animations,
-							styles,
-							dataSources,
-						});
+						setAnimations(animations);
+						setStyles(styles);
+						setDataSources(dataSources);
 						if (objects) {
-							this.canvasRef.current.handler.clear(true);
+							canvasRef.current.handler.clear(true);
 							const data = objects.filter(obj => {
 								if (!obj.id) {
 									return false;
 								}
 								return true;
 							});
-							this.canvasRef.current.handler.importJSON(data);
+							canvasRef.current.handler.importJSON(data);
 						}
 					};
 					reader.onloadend = () => {
-						this.showLoading(false);
+						showLoading(false);
 					};
 					reader.onerror = () => {
-						this.showLoading(false);
+						showLoading(false);
 					};
 					reader.readAsText(files[0]);
 				}, 500);
@@ -536,21 +493,20 @@ class ImageMapEditor extends Component {
 			inputEl.type = 'file';
 			inputEl.hidden = true;
 			inputEl.onchange = e => {
-				this.handlers.onImport(e.target.files);
+				handlers.onImport(e.target.files);
 			};
 			document.body.appendChild(inputEl); // required for firefox
 			inputEl.click();
 			inputEl.remove();
 		},
 		onDownload: () => {
-			this.showLoading(true);
-			const objects = this.canvasRef.current.handler.exportJSON().filter(obj => {
+			showLoading(true);
+			const objects = canvasRef.current.handler.exportJSON().filter(obj => {
 				if (!obj.id) {
 					return false;
 				}
 				return true;
 			});
-			const { animations, styles, dataSources } = this.state;
 			const exportDatas = {
 				objects,
 				animations,
@@ -561,211 +517,112 @@ class ImageMapEditor extends Component {
 			anchorEl.href = `data:text/json;charset=utf-8,${encodeURIComponent(
 				JSON.stringify(exportDatas, null, '\t'),
 			)}`;
-			anchorEl.download = `${this.canvasRef.current.handler.workarea.name || 'sample'}.json`;
+			anchorEl.download = `${canvasRef.current.handler.workarea.name || 'sample'}.json`;
 			document.body.appendChild(anchorEl); // required for firefox
 			anchorEl.click();
 			anchorEl.remove();
-			this.showLoading(false);
+			showLoading(false);
 		},
-		onChangeAnimations: animations => {
-			if (!this.state.editing) {
-				this.changeEditing(true);
-			}
-			this.setState({
-				animations,
-			});
-		},
-		onChangeStyles: styles => {
-			if (!this.state.editing) {
-				this.changeEditing(true);
-			}
-			this.setState({
-				styles,
-			});
-		},
-		onChangeDataSources: dataSources => {
-			if (!this.state.editing) {
-				this.changeEditing(true);
-			}
-			this.setState({
-				dataSources,
-			});
-		},
+		onChangeAnimations: animations => { setAnimations(animations); },
+		onChangeStyles: styles => { setStyles(styles); },
+		onChangeDataSources: dataSources => { setDataSources(dataSources); },
 		onSaveImage: () => {
-			this.canvasRef.current.handler.saveCanvasImage();
+			canvasRef.current.handler.saveCanvasImage();
 		},
 	};
 
-	transformList = () => {
-		return Object.values(this.state.descriptors).reduce((prev, curr) => prev.concat(curr), []);
+	const transformList = () => {
+		return Object.values(descriptors).reduce((prev, curr) => prev.concat(curr), []);
 	};
 
-	showLoading = loading => {
-		this.setState({
-			loading,
-		});
+	// Reducer function to update state based on actions
+	const stateReducer = (state, action) => {
+		switch (action.type) {
+			case 'download':
+				handlers.onDownload();
+				return state;
+			case 'upload':
+				handlers.onUpload();
+				return state;
+			case 'image-save':
+				handlers.onSaveImage();
+				return state;
+			default:
+				return state;
+		}
 	};
-
-	changeEditing = editing => {
-		this.setState({
-			editing,
-		});
-	};
-
-	render() {
-		const {
-			preview,
-			selectedItem,
-			zoomRatio,
-			loading,
-			progress,
-			animations,
-			styles,
-			dataSources,
-			editing,
-			descriptors,
-			objects,
-		} = this.state;
-		const {
-			onAdd,
-			onRemove,
-			onSelect,
-			onModified,
-			onChange,
-			onZoom,
-			onTooltip,
-			onClick,
-			onContext,
-			onTransaction,
-		} = this.canvasHandlers;
-		const {
-			onChangePreview,
-			onDownload,
-			onUpload,
-			onChangeAnimations,
-			onChangeStyles,
-			onChangeDataSources,
-			onSaveImage,
-		} = this.handlers;
-		const action = (
-			<React.Fragment>
-				<CommonButton
-					className="rde-action-btn"
-					shape="circle"
-					icon="file-download"
-					disabled={!editing}
-					tooltipTitle={i18n.t('action.download')}
-					onClick={onDownload}
-					tooltipPlacement="bottomRight"
-				/>
-				{editing ? (
-					<Popconfirm
-						title={i18n.t('imagemap.imagemap-editing-confirm')}
-						okText={i18n.t('action.ok')}
-						cancelText={i18n.t('action.cancel')}
-						onConfirm={onUpload}
-						placement="bottomRight"
-					>
-						<CommonButton
-							className="rde-action-btn"
-							shape="circle"
-							icon="file-upload"
-							tooltipTitle={i18n.t('action.upload')}
-							tooltipPlacement="bottomRight"
-						/>
-					</Popconfirm>
-				) : (
-					<CommonButton
-						className="rde-action-btn"
-						shape="circle"
-						icon="file-upload"
-						tooltipTitle={i18n.t('action.upload')}
-						tooltipPlacement="bottomRight"
-						onClick={onUpload}
+	const [state, dispatch] = useReducer(stateReducer, {});
+	const title = <ImageMapTitle dispatch={dispatch} />;
+	const content = (
+		<div className="rde-editor">
+			<ImageMapItems
+				ref={itemsRef}
+				canvasRef={canvasRef.current}
+				descriptors={descriptors}
+			/>
+			<div className="rde-editor-canvas-container">
+				<div className="rde-editor-header-toolbar">
+					<ImageMapHeaderToolbar
+						canvasRef={canvasRef.current}
+						selectedItem={selectedItem}
+						onSelect={canvasHandlers.onSelect}
 					/>
-				)}
-				<CommonButton
-					className="rde-action-btn"
-					shape="circle"
-					icon="image"
-					tooltipTitle={i18n.t('action.image-save')}
-					onClick={onSaveImage}
-					tooltipPlacement="bottomRight"
-				/>
-			</React.Fragment>
-		);
-		const title = <ImageMapTitle action={action} />;
-		const content = (
-			<div className="rde-editor">
-				<ImageMapItems
-					ref={this.itemsRef}
-					canvasRef={this.canvasRef.current}
-					descriptors={descriptors}
-				/>
-				<div className="rde-editor-canvas-container">
-					<div className="rde-editor-header-toolbar">
-						<ImageMapHeaderToolbar
-							canvasRef={this.canvasRef.current}
-							selectedItem={selectedItem}
-							onSelect={onSelect}
-						/>
-					</div>
-					<div className="rde-editor-canvas">
-						<Canvas
-							ref={this.canvasRef}
-							className="rde-canvas"
-							minZoom={1}
-							maxZoom={500}
-							objectOption={defaultOption}
-							propertiesToInclude={propertiesToInclude}
-							onModified={onModified}
-							onAdd={onAdd}
-							onRemove={onRemove}
-							onSelect={onSelect}
-							onZoom={onZoom}
-							onTooltip={onTooltip}
-							onClick={onClick}
-							onContext={onContext}
-							onTransaction={onTransaction}
-							keyEvent={{
-								transaction: true,
-							}}
-							canvasOption={{
-								selectionColor: 'rgba(8, 151, 156, 0.3)',
-							}}
-						/>
-					</div>
-					<div className="rde-editor-footer-toolbar">
-						<ImageMapFooterToolbar
-							canvasRef={this.canvasRef.current}
-							preview={preview}
-							onChangePreview={onChangePreview}
-							zoomRatio={zoomRatio}
-						/>
-					</div>
 				</div>
-				<ImageMapConfigurations
-					canvasRef={this.canvasRef.current}
-					onChange={onChange}
-					selectedItem={selectedItem}
-					onChangeAnimations={onChangeAnimations}
-					onChangeStyles={onChangeStyles}
-					onChangeDataSources={onChangeDataSources}
-					animations={animations}
-					styles={styles}
-					dataSources={dataSources}
-				/>
-				<ImageMapPreview
-					preview={preview}
-					onChangePreview={onChangePreview}
-					onTooltip={onTooltip}
-					onClick={onClick}
-					objects={objects}
-				/>
+				<div className="rde-editor-canvas">
+					<Canvas
+						ref={canvasRef}
+						className="rde-canvas"
+						minZoom={1}
+						maxZoom={500}
+						objectOption={defaultOption}
+						propertiesToInclude={propertiesToInclude}
+						onModified={canvasHandlers.onModified}
+						onAdd={canvasHandlers.onAdd}
+						onRemove={canvasHandlers.onRemove}
+						onSelect={canvasHandlers.onSelect}
+						onZoom={canvasHandlers.onZoom}
+						onTooltip={canvasHandlers.onTooltip}
+						onClick={canvasHandlers.onClick}
+						onContext={canvasHandlers.onContext}
+						onTransaction={canvasHandlers.onTransaction}
+						keyEvent={{
+							transaction: true,
+						}}
+						canvasOption={{
+							selectionColor: 'rgba(8, 151, 156, 0.3)',
+						}}
+					/>
+				</div>
+				<div className="rde-editor-footer-toolbar">
+					<ImageMapFooterToolbar
+						canvasRef={canvasRef.current}
+						preview={preview}
+						onChangePreview={handlers.onChangePreview}
+						zoomRatio={zoomRatio}
+					/>
+				</div>
 			</div>
-		);
-		return <Content title={title} content={content} loading={loading} className="" />;
-	}
+			<ImageMapConfigurations
+				canvasRef={canvasRef.current}
+				onChange={canvasHandlers.onChange}
+				selectedItem={selectedItem}
+				onChangeAnimations={handlers.onChangeAnimations}
+				onChangeStyles={handlers.onChangeStyles}
+				onChangeDataSources={handlers.onChangeDataSources}
+				animations={animations}
+				styles={styles}
+				dataSources={dataSources}
+			/>
+			<ImageMapPreview
+				preview={preview}
+				onChangePreview={handlers.onChangePreview}
+				onTooltip={canvasHandlers.onTooltip}
+				onClick={canvasHandlers.onClick}
+				objects={objects}
+			/>
+		</div>
+	);
+	return <Content title={title} content={content} loading={loading} className="" />;
 }
 
 export default ImageMapEditor;
