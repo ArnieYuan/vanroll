@@ -1,7 +1,7 @@
 import { Badge, Button, Menu, Popconfirm } from 'antd';
 import i18n from 'i18next';
 import debounce from 'lodash/debounce';
-import React, { useEffect, useRef, useReducer, useState } from 'react';
+import React, { useEffect, useRef, useReducer, useState, useContext } from 'react';
 import Canvas from '../../canvas/Canvas';
 import CommonButton from '../../components/common/CommonButton';
 import { Content } from '../../components/layout';
@@ -14,6 +14,7 @@ import ImageMapHeaderToolbar from './ImageMapHeaderToolbar';
 import ImageMapItems from './ImageMapItems';
 import ImageMapPreview from './ImageMapPreview';
 import ImageMapTitle from './ImageMapTitle';
+import { LocalStorageContext } from '../../contexts/LocalStorageContext';
 
 const propertiesToInclude = [
 	'id',
@@ -82,8 +83,7 @@ const ImageMapEditor = (props) => {
 	const [styles, setStyles] = useState([]);
 	const [dataSources, setDataSources] = useState([]);
 	const [descriptors, setDescriptors] = useState({});
-	// Only used by preview
-	const [objects, setObjects] = useState([]);
+	const { setObjects } = useContext(LocalStorageContext);
 	const canvasRef = useRef();
 	const itemsRef = useRef();
 
@@ -437,17 +437,8 @@ const ImageMapEditor = (props) => {
 
 	const handlers = {
 		onChangePreview: checked => {
-			let data;
-			if (canvasRef.current) {
-				data = canvasRef.current.handler.exportJSON().filter(obj => {
-					if (!obj.id) {
-						return false;
-					}
-					return true;
-				});
-			}
+			setObjects(getObjects());
 			setPreview(typeof checked === 'object' ? false : checked);
-			setObjects(data);
 		},
 		onProgress: progress => { setProgress(progress); },
 		onImport: files => {
@@ -501,14 +492,8 @@ const ImageMapEditor = (props) => {
 		},
 		onDownload: () => {
 			showLoading(true);
-			const objects = canvasRef.current.handler.exportJSON().filter(obj => {
-				if (!obj.id) {
-					return false;
-				}
-				return true;
-			});
 			const exportDatas = {
-				objects,
+				objects: getObjects(),
 				animations,
 				styles,
 				dataSources,
@@ -533,6 +518,20 @@ const ImageMapEditor = (props) => {
 
 	const transformList = () => {
 		return Object.values(descriptors).reduce((prev, curr) => prev.concat(curr), []);
+	};
+
+	// Call it whenever leaving the editor.
+	const getObjects = () => {
+		if (canvasRef.current) {
+			const objects = canvasRef.current.handler.exportJSON().filter(obj => {
+				if (!obj.id) {
+					return false;
+				}
+				return true;
+			});
+			return objects;
+		}
+		return [];
 	};
 
 	// Reducer function to update state based on actions
@@ -618,7 +617,6 @@ const ImageMapEditor = (props) => {
 				onChangePreview={handlers.onChangePreview}
 				onTooltip={canvasHandlers.onTooltip}
 				onClick={canvasHandlers.onClick}
-				objects={objects}
 			/>
 		</div>
 	);

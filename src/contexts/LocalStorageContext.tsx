@@ -16,10 +16,12 @@ const getObjects = () => {
     return storageData ? JSON.parse(storageData) : [];
 };
 
+const writeObjectsToLocalStorage = debounce(
+    (objects) => localStorage.setItem('objects', JSON.stringify(objects)), 5000);
+
 const setObjects = (objects: []) => {
     objectsCache = objects;
-    // Save at most every 5 seconds
-    debounce((objects) => localStorage.setItem('objects', JSON.stringify(objects)), 5000);
+    writeObjectsToLocalStorage(objects);
 };
 
 const LocalStorageContext = React.createContext<LocalStorageType>({});

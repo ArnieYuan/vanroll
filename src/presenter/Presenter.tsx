@@ -1,23 +1,49 @@
-import React, { useRef } from 'react';
-import { v4 as uuid } from 'uuid';
-import { Canvas, FiberHandler } from '../canvas';
-import { CanvasInstance } from '../canvas/Canvas';
-import { Content } from '../components/layout';
+import React, { useContext, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Spin, Button } from 'antd';
+import { Canvas, CanvasInstance } from '../canvas';
+import Icon from '../components/icon/Icon';
+import { LocalStorageContext } from '../contexts/LocalStorageContext';
 
-const Presenter = () => {
+export type PresenterProps = {
+};
+
+const Presenter = (props) => {
+	const { getObjects } = useContext(LocalStorageContext);
+	const [loading, setLoading] = useState(false);
+	const navigate = useNavigate();
 	const canvasRef = useRef<CanvasInstance>();
 	const handleLoad = () => {
-		const fiberHandler = canvasRef.current?.handler.registerHandler('fiber', FiberHandler) as FiberHandler;
+		if (!getObjects) {
+			return;
+		}
+		setLoading(true);
+		canvasRef.current?.handler.importJSON(getObjects());
+		setLoading(false);
+	};
+	const exit = () => {
+		navigate('/');
 	};
 	return (
-		<Content>
+		<Spin spinning={loading}>
 			<Canvas
 				ref={canvasRef}
+				editable={false}
+				className="rde-canvas"
+				canvasOption={{
+					perPixelTargetFind: true,
+				}}
+				keyEvent={{
+					grab: false,
+				}}
 				onLoad={handleLoad}
-				activeSelectionOption={{ hasControls: false, hasBorders: false }}
-				fabricObjects={{}}
+				maxZoom={500}
 			/>
-		</Content>
+			<Button className="rde-action-btn rde-preview-close-btn" onClick={exit}>
+				<Icon name="times" size={1.5} />
+			</Button>
+
+		</Spin>
 	);
 };
 
