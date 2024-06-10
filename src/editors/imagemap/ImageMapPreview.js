@@ -22,7 +22,7 @@ const ImageMapPreview = (props) => {
 			<div className={previewClassName}>
 				<div
 					style={{
-						overvlow: 'hidden',
+						overflow: 'hidden',
 						display: 'flex',
 						flex: '1',
 						height: '100%',

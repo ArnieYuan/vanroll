@@ -1,6 +1,6 @@
 import React, { useContext, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Spin, Button } from 'antd';
+import { Button } from 'antd';
 import { Canvas, CanvasInstance } from '../canvas';
 import Icon from '../components/icon/Icon';
 import { LocalStorageContext } from '../contexts/LocalStorageContext';
@@ -25,7 +25,12 @@ const Presenter = (props) => {
 		navigate('/');
 	};
 	return (
-		<Spin spinning={loading}>
+		<div style={{
+			overflow: 'hidden',
+			display: 'flex',
+			flex: '1',
+			height: '100%',
+		}} >
 			<Canvas
 				ref={canvasRef}
 				editable={false}
@@ -42,8 +47,7 @@ const Presenter = (props) => {
 			<Button className="rde-action-btn rde-preview-close-btn" onClick={exit}>
 				<Icon name="times" size={1.5} />
 			</Button>
-
-		</Spin>
+		</div>
 	);
 };
 
