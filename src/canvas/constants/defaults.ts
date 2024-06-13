@@ -6,7 +6,7 @@ export const canvasOption = {
 	height: 150,
 	selection: true,
 	defaultCursor: 'default',
-	backgroundColor: '#f3f3f3',
+	backgroundColor: 'transparent',
 };
 
 export const keyEvent = {
