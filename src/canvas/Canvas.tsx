@@ -14,6 +14,7 @@ export interface CanvasInstance {
 	handler: Handler;
 	canvas: FabricCanvas;
 	container: HTMLDivElement;
+	backgroundVideoElement: HTMLVideoElement;
 }
 
 export type CanvasProps = HandlerOptions & {
@@ -30,6 +31,7 @@ class InternalCanvas extends Component<CanvasProps, IState> implements CanvasIns
 	public handler: Handler;
 	public canvas: FabricCanvas;
 	public container: HTMLDivElement;
+	public backgroundVideoElement: HTMLVideoElement;
 	private containerRef = React.createRef<HTMLDivElement>();
 	private resizeObserver: ResizeObserver;
 
@@ -60,6 +62,16 @@ class InternalCanvas extends Component<CanvasProps, IState> implements CanvasIns
 		this.canvas = new fabric.Canvas(`canvas_${id}`, mergedCanvasOption);
 		this.canvas.setBackgroundColor(mergedCanvasOption.backgroundColor, this.canvas.renderAll.bind(this.canvas));
 		this.canvas.renderAll();
+		this.backgroundVideoElement = fabric.util.makeElement('video', {
+			id: 'bg_' + id,
+			autoplay: true,
+			muted: false,
+			loop: false,
+			preload: 'none',
+			playsinline: true,
+			style: `position: absolute;`
+		});
+		this.canvas.wrapperEl.prepend(this.backgroundVideoElement);
 		this.container = this.containerRef.current;
 		this.handler = new Handler({
 			id,
@@ -180,6 +192,7 @@ const Canvas: React.FC<CanvasProps> = React.forwardRef<CanvasInstance, CanvasPro
 		handler: canvasRef.current.handler,
 		canvas: canvasRef.current.canvas,
 		container: canvasRef.current.container,
+		backgroundVideoElement: canvasRef.current.backgroundVideoElement,
 	}));
 	return <InternalCanvas ref={canvasRef} {...props} />;
 });

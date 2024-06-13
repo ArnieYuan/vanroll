@@ -11,6 +11,7 @@ export type PresenterProps = {
 const Presenter = (props) => {
 	const { getObjects } = useContext(LocalStorageContext);
 	const [loading, setLoading] = useState(false);
+	const [stream, setStream] = useState<MediaStream | null>(null);
 	const navigate = useNavigate();
 	const canvasRef = useRef<CanvasInstance>();
 	const handleLoad = () => {
@@ -19,9 +20,21 @@ const Presenter = (props) => {
 		}
 		setLoading(true);
 		canvasRef.current?.handler.importJSON(getObjects());
+		navigator.mediaDevices.getUserMedia({ video: true }).then(
+			(stream) => {
+				setStream(stream);
+				if (canvasRef.current) {
+					canvasRef.current.backgroundVideoElement.srcObject = stream;
+				}
+			});
 		setLoading(false);
 	};
 	const exit = () => {
+		if (stream) {
+			stream.getTracks().forEach((track) => {
+				track.stop();
+			});
+		}
 		navigate('/');
 	};
 	return (
@@ -38,6 +51,7 @@ const Presenter = (props) => {
 				canvasOption={{
 					perPixelTargetFind: true,
 				}}
+				workareaOption={{ backgroundColor: 'transparent' }}
 				keyEvent={{
 					grab: false,
 				}}
