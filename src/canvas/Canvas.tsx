@@ -70,7 +70,7 @@ class InternalCanvas extends Component<CanvasProps, IState> implements CanvasIns
 			preload: 'none',
 			playsinline: true,
 			style: `position: absolute;`
-		});
+		}) as HTMLVideoElement;
 		this.canvas.wrapperEl.prepend(this.backgroundVideoElement);
 		this.container = this.containerRef.current;
 		this.handler = new Handler({
