@@ -26,11 +26,15 @@ const NodeProperties = (props) => {
 		}
 	}, [props.selectedItem]);
 	const initialValues = {
+		'link.enabled': selectedItem.link.enabled,
+		'link.state': selectedItem.link.state || 'current',
+		'link.url': selectedItem.link.url || '',
 		'shadow.blur': selectedItem.shadow.blur || 15,
 		'shadow.color': selectedItem.shadow.color || 'rgba(0, 0, 0, 0)',
 		'shadow.enabled': 'enabled',
 		'shadow.offsetX': selectedItem.shadow.offsetX || 10,
 		'shadow.offsetY': selectedItem.shadow.offsetY || 10,
+		'tooltip.enabled': selectedItem.tooltip.enabled,
 		angle: selectedItem.angle,
 		file: workarea.file,
 		height: selectedItem.height * selectedItem.scaleY,
