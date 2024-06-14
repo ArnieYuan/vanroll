@@ -62,21 +62,14 @@ class ZoomHandler {
 	 *
 	 */
 	public zoomToFit = () => {
-		let scaleX = this.handler.canvas.getWidth() / this.handler.workarea.width;
+		let scale = this.handler.canvas.getWidth() / this.handler.workarea.width;
 		const scaleY = this.handler.canvas.getHeight() / this.handler.workarea.height;
-		if (this.handler.workarea.height >= this.handler.workarea.width) {
-			scaleX = scaleY;
-			if (this.handler.canvas.getWidth() < this.handler.workarea.width * scaleX) {
-				scaleX = scaleX * (this.handler.canvas.getWidth() / (this.handler.workarea.width * scaleX));
-			}
-		} else {
-			if (this.handler.canvas.getHeight() < this.handler.workarea.height * scaleX) {
-				scaleX = scaleX * (this.handler.canvas.getHeight() / (this.handler.workarea.height * scaleX));
-			}
+		if (scaleY < scale) {
+			scale = scaleY;
 		}
 		const center = this.handler.canvas.getCenter();
 		this.handler.canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
-		this.zoomToPoint(new fabric.Point(center.left, center.top), scaleX);
+		this.zoomToPoint(new fabric.Point(center.left, center.top), scale);
 	};
 
 	/**
@@ -112,23 +105,13 @@ class ZoomHandler {
 		const diffTop = canvasTop - (top + height / 2);
 		const diffLeft = canvasLeft - (left + width / 2);
 		if (zoomFit) {
-			let scaleX;
-			let scaleY;
-			scaleX = this.handler.canvas.getWidth() / width;
-			scaleY = this.handler.canvas.getHeight() / height;
-			if (height > width) {
-				scaleX = scaleY;
-				if (this.handler.canvas.getWidth() < width * scaleX) {
-					scaleX = scaleX * (this.handler.canvas.getWidth() / (width * scaleX));
-				}
-			} else {
-				scaleY = scaleX;
-				if (this.handler.canvas.getHeight() < height * scaleX) {
-					scaleX = scaleX * (this.handler.canvas.getHeight() / (height * scaleX));
-				}
+			let scale = this.handler.canvas.getWidth() / width;
+			const scaleY = this.handler.canvas.getHeight() / height;
+			if (scaleY < scale) {
+				scale = scaleY;
 			}
 			this.handler.canvas.setViewportTransform([1, 0, 0, 1, diffLeft, diffTop]);
-			this.zoomToPoint(new fabric.Point(canvasLeft, canvasTop), scaleX);
+			this.zoomToPoint(new fabric.Point(canvasLeft, canvasTop), scale);
 		} else {
 			const zoom = this.handler.canvas.getZoom();
 			this.handler.canvas.setViewportTransform([1, 0, 0, 1, diffLeft, diffTop]);
