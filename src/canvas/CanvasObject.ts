@@ -3,7 +3,6 @@ import { fabric } from 'fabric';
 import {
 	Arrow,
 	Gif,
-	Chart,
 	Element,
 	Iframe,
 	Video,
@@ -65,27 +64,6 @@ const CanvasObject: CanvasObjectSchema = {
 	},
 	arrow: {
 		create: ({ points, ...option }: { points: any }) => new Arrow(points, option),
-	},
-	chart: {
-		create: (option: any) =>
-			new Chart(
-				option.chartOption || {
-					xAxis: {},
-					yAxis: {},
-					series: [
-						{
-							type: 'line',
-							data: [
-								[0, 1],
-								[1, 2],
-								[2, 3],
-								[3, 4],
-							],
-						},
-					],
-				},
-				option,
-			),
 	},
 	element: {
 		create: ({ code, ...option }: { code: Code }) => new Element(code, option),

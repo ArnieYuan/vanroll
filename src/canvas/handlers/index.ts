@@ -2,8 +2,6 @@ export { default as Handler } from './Handler';
 
 export { default as ImageHandler } from './ImageHandler';
 
-export { default as ChartHandler } from './ChartHandler';
-
 export { default as ElementHandler } from './ElementHandler';
 
 export { default as CropHandler } from './CropHandler';

@@ -286,18 +286,6 @@ const ImageMapEditor = (props) => {
 				canvasRef.current.handler.imageHandler.applyFilterByType(filterKey, changedValue[filterKey]);
 				return;
 			}
-			if (changedKey === 'chartOption') {
-				try {
-					const sandbox = new SandBox();
-					const compiled = sandbox.compile(changedValue);
-					const chartOption = compiled(3, animations, styles, selectedItem.userProperty);
-					selectedItem.setChartOptionStr(changedValue);
-					canvasRef.current.handler.elementHandler.setById(selectedItem.id, chartOption);
-				} catch (error) {
-					console.error(error);
-				}
-				return;
-			}
 			canvasRef.current.handler.set(changedKey, changedValue);
 		},
 		onChangeWokarea: (changedKey, changedValue, allValues) => {

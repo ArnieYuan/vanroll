@@ -162,22 +162,6 @@
 	],
 	"ELEMENT": [
 		{
-			"name": "Chart",
-			"description": "",
-			"type": "element",
-			"icon": {
-				"prefix": "fas",
-				"name": "chart-line"
-			},
-			"option": {
-				"superType": "element",
-				"type": "chart",
-				"name": "New chart",
-				"width": 356,
-				"height": 356
-			}
-		},
-		{
 			"name": "Element",
 			"description": "",
 			"type": "element",

@@ -423,14 +423,4 @@ export default {
 			component: UserProperty,
 		},
 	},
-	chart: {
-		general: {
-			title: 'General',
-			component: GeneralProperty,
-		},
-		chartOption: {
-			title: 'Chart Option',
-			component: ChartProperty,
-		},
-	},
 };

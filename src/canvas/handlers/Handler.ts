@@ -5,7 +5,6 @@ import warning from 'warning';
 import {
 	AlignmentHandler,
 	AnimationHandler,
-	ChartHandler,
 	ContextmenuHandler,
 	CropHandler,
 	CustomHandler,
@@ -259,7 +258,6 @@ class Handler implements HandlerOptions {
 	public onLoad?: (handler: Handler, canvas?: fabric.Canvas) => void;
 
 	public imageHandler: ImageHandler;
-	public chartHandler: ChartHandler;
 	public elementHandler: ElementHandler;
 	public cropHandler: CropHandler;
 	public animationHandler: AnimationHandler;
@@ -371,7 +369,6 @@ class Handler implements HandlerOptions {
 	public initHandler = () => {
 		this.workareaHandler = new WorkareaHandler(this);
 		this.imageHandler = new ImageHandler(this);
-		this.chartHandler = new ChartHandler(this);
 		this.elementHandler = new ElementHandler(this);
 		this.cropHandler = new CropHandler(this);
 		this.animationHandler = new AnimationHandler(this);
