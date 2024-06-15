@@ -38,6 +38,4 @@ export { default as DrawingHandler } from './DrawingHandler';
 
 export { default as ShortcutHandler } from './ShortcutHandler';
 
-export { default as FiberHandler } from './FiberHandler';
-
 export { default as CustomHandler } from './CustomHandler';
