@@ -1,85 +1,57 @@
 import { InboxOutlined } from '@ant-design/icons';
 import { Upload, message } from 'antd';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { useState } from 'react'; // Import useState hook
 
-const { Dragger } = Upload;
+const FileUpload = ({ onChange, limit = 5, accept, value }) => {
+  const [fileList, setFileList] = useState(value ? [value] : []);
 
-class FileUpload extends Component {
-	static propTypes = {
-		onChange: PropTypes.func,
-		limit: PropTypes.number,
-		accept: PropTypes.string,
-	};
+  const handleOnChange = (info) => {
+    const isLimit = info.file.size / 1024 / 1024 < limit;
+    if (!isLimit) {
+      message.error(`Limited to ${limit}MB or less`);
+      return false;
+    }
+    onChange(info.file);
+  };
 
-	static defaultProps = {
-		limit: 5,
-	};
+  const handleOnRemove = (file) => {
+    setFileList((prevList) => {
+      const index = prevList.indexOf(file);
+      const newFileList = prevList.slice();
+      newFileList.splice(index, 1);
+      return newFileList;
+    });
+    onChange(null);
+  };
 
-	state = {
-		fileList: this.props.value ? [this.props.value] : [],
-	};
+  const handleBeforeUpload = (file) => {
+    const isLimit = file.size / 1024 / 1024 < limit;
+    if (!isLimit) {
+      return false;
+    }
+    setFileList([file]);
+    return false;
+  };
 
-	UNSAFE_componentWillReceiveProps(nextProps) {
-		this.setState({
-			fileList: nextProps.value ? [nextProps.value] : [],
-		});
-	}
+  const props = {
+    accept,
+    name: 'file',
+    multiple: false,
+    onChange: handleOnChange,
+    onRemove: handleOnRemove,
+    beforeUpload: handleBeforeUpload,
+    fileList,
+  };
 
-	render() {
-		const { accept, limit } = this.props;
-		const { fileList } = this.state;
-		const props = {
-			accept,
-			name: 'file',
-			multiple: false,
-			onChange: info => {
-				const isLimit = info.file.size / 1024 / 1024 < limit;
-				if (!isLimit) {
-					message.error(`Limited to ${limit}MB or less`);
-					return false;
-				}
-				const { onChange } = this.props;
-				onChange(info.file);
-			},
-			onRemove: file => {
-				this.setState(
-					({ fileList }) => {
-						const index = fileList.indexOf(file);
-						const newFileList = fileList.slice();
-						newFileList.splice(index, 1);
-						return {
-							fileList: newFileList,
-						};
-					},
-					() => {
-						const { onChange } = this.props;
-						onChange(null);
-					},
-				);
-			},
-			beforeUpload: file => {
-				const isLimit = file.size / 1024 / 1024 < limit;
-				if (!isLimit) {
-					return false;
-				}
-				this.setState({
-					fileList: [file],
-				});
-				return false;
-			},
-			fileList,
-		};
-		return (
-            <Dragger {...props}>
-				<p className="ant-upload-drag-icon">
-					<InboxOutlined />
-				</p>
-				<p className="ant-upload-text">Click or drag file to this area to upload</p>
-				<p className="ant-upload-hint">{`Support for a single upload. Limited to ${limit}MB or less`}</p>
-			</Dragger>
-        );
-	}
-}
+  return (
+    <Upload.Dragger {...props}>
+      <p className="ant-upload-drag-icon">
+        <InboxOutlined />
+      </p>
+      <p className="ant-upload-text">Click or drag file to this area to upload</p>
+      <p className="ant-upload-hint">{`Support for a single upload. Limited to ${limit}MB or less`}</p>
+    </Upload.Dragger>
+  );
+};
 
 export default FileUpload;
