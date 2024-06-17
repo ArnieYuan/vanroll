@@ -30,7 +30,7 @@ export default {
 					</Form.Item>
 				) : (
 					<Form.Item name='src'>
-						<UrlModal form={form} />
+						<UrlModal value={form.getFieldValue('imageLoadType') === 'src'} />
 					</Form.Item>
 				)}
 			</React.Fragment>
