@@ -212,22 +212,5 @@
 				"loop": true
 			}
 		}
-	],
-	"SVG": [
-		{
-			"name": "Default",
-			"description": "",
-			"type": "default",
-			"icon": {
-				"prefix": "fas",
-				"name": "bezier-curve"
-			},
-			"option": {
-				"type": "svg",
-				"superType": "svg",
-				"name": "New SVG",
-				"loadType": "svg"
-			}
-		}
 	]
 }
