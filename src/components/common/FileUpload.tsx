@@ -1,9 +1,21 @@
+import React, { useState } from 'react';
+import { Upload, message, UploadFile, UploadProps } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
-import { Upload, message } from 'antd';
-import React, { useState } from 'react'; // Import useState hook
 
-const FileUpload = ({ onChange, limit = 5, accept, value }) => {
-  const [fileList, setFileList] = useState(value ? [value] : []);
+interface FileUploadProps {
+  onChange: (file: UploadFile | null) => void; // Define callback type for file
+  limit?: number; // Make limit optional
+  accept?: string;
+  value?: UploadFile | null; // Define optional value type
+}
+
+const FileUpload: React.FC<FileUploadProps> = ({
+  onChange,
+  limit = 5,
+  accept,
+  value,
+}) => {
+  const [fileList, setFileList] = useState<UploadFile[]>(value ? [value] : []);
 
   const handleOnChange = (info) => {
     const isLimit = info.file.size / 1024 / 1024 < limit;
@@ -14,13 +26,8 @@ const FileUpload = ({ onChange, limit = 5, accept, value }) => {
     onChange(info.file);
   };
 
-  const handleOnRemove = (file) => {
-    setFileList((prevList) => {
-      const index = prevList.indexOf(file);
-      const newFileList = prevList.slice();
-      newFileList.splice(index, 1);
-      return newFileList;
-    });
+  const handleOnRemove = () => {
+    setFileList([]);
     onChange(null);
   };
 
@@ -33,7 +40,7 @@ const FileUpload = ({ onChange, limit = 5, accept, value }) => {
     return false;
   };
 
-  const props = {
+  const props: UploadProps = {
     accept,
     name: 'file',
     multiple: false,

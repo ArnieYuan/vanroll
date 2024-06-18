@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
-import UrlModal from '../../../components/common/UrlModal';
+import FileOrUrlModal from '../../../components/common/FileOrUrlModal';
 
 export default {
 	render(canvasRef, form, data) {
@@ -19,7 +19,7 @@ export default {
 						},
 					],
 					initialValue: data.src,
-				})(<UrlModal form={form} />)}
+				})(<FileOrUrlModal form={form} />)}
 			</Form.Item>
 		);
 	},

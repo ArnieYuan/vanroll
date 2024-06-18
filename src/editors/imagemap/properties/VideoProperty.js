@@ -2,7 +2,6 @@ import React from 'react';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Radio, Row, Col, Switch } from 'antd';
-import UrlModal from '../../../components/common/UrlModal';
 import FileUpload from '../../../components/common/FileUpload';
 
 export default {
@@ -77,34 +76,20 @@ export default {
 						</Radio.Group>,
 					)}
 				</Form.Item>
-				{videoLoadType === 'file' ? (
-					<Form.Item label="File" colon={false}>
-						{getFieldDecorator('file', {
-							rules: [
-								{
-									required: true,
-									message: 'Please select video',
-								},
-							],
-							initialValue: data.file,
-						})(
-							// <FileUpload fileList={data.file ? [data.file] : []} />,
-							<FileUpload accept="video/*" />,
-						)}
-					</Form.Item>
-				) : (
-					<Form.Item>
-						{getFieldDecorator('src', {
-							rules: [
-								{
-									required: true,
-									message: 'Please select image',
-								},
-							],
-							initialValue: data.src,
-						})(<UrlModal form={form} />)}
-					</Form.Item>
-				)}
+				<Form.Item label="File" colon={false}>
+					{getFieldDecorator('file', {
+						rules: [
+							{
+								required: true,
+								message: 'Please select video',
+							},
+						],
+						initialValue: data.file,
+					})(
+						// <FileUpload fileList={data.file ? [data.file] : []} />,
+						<FileUpload accept="video/*" />,
+					)}
+				</Form.Item>
 			</React.Fragment>
 		);
 	},

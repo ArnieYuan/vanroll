@@ -16,6 +16,6 @@ export { default as InputHtml } from './InputHtml';
 
 export { default as Scrollbar } from './Scrollbar';
 
-export { default as UrlModal } from './UrlModal';
+export { default as FileOrUrlModal } from './FileOrUrlModal';
 
 export { default as SVGModal } from './SVGModal';
