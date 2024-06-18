@@ -68,55 +68,6 @@
 			}
 		}
 	],
-	"SHAPE": [
-		{
-			"name": "Triangle",
-			"description": "",
-			"type": "shape",
-			"icon": {
-				"prefix": "fas",
-				"name": "play",
-				"style": {
-					"transform": "rotate(270deg)"
-				}
-			},
-			"option": {
-				"type": "triangle",
-				"width": 30,
-				"height": 30,
-				"name": "New shape"
-			}
-		},
-		{
-			"name": "Rectangle",
-			"description": "",
-			"type": "shape",
-			"icon": {
-				"prefix": "fas",
-				"name": "stop"
-			},
-			"option": {
-				"type": "rect",
-				"width": 40,
-				"height": 40,
-				"name": "New shape"
-			}
-		},
-		{
-			"name": "Circle",
-			"description": "",
-			"type": "shape",
-			"icon": {
-				"prefix": "fas",
-				"name": "circle"
-			},
-			"option": {
-				"type": "circle",
-				"radius": 30,
-				"name": "New shape"
-			}
-		}
-	],
 	"DRAWING": [
 		{
 			"name": "Polygon",
