@@ -8,6 +8,7 @@ import { Flex } from '../../components/flex';
 import Icon from '../../components/icon/Icon';
 import Scrollbar from '../../components/common/Scrollbar';
 import CommonButton from '../../components/common/CommonButton';
+import { FileOrUrlModal } from '../../components/common';
 import { v4 as uuid } from 'uuid';
 
 notification.config({
@@ -27,6 +28,8 @@ class ImageMapItems extends Component {
 		textSearch: '',
 		descriptors: {},
 		filteredDescriptors: [],
+		fileOrUrlModalVisible: false,
+		activeItem: {},
 	};
 
 	componentDidMount() {
@@ -55,6 +58,8 @@ class ImageMapItems extends Component {
 		} else if (JSON.stringify(this.state.activeKey) !== JSON.stringify(nextState.activeKey)) {
 			return true;
 		} else if (this.state.collapse !== nextState.collapse) {
+			return true;
+		} else if (this.state.fileOrUrlModalVisible !== nextState.fileOrUrlModalVisible) {
 			return true;
 		}
 		return false;
@@ -92,15 +97,38 @@ class ImageMapItems extends Component {
 
 	/* eslint-disable react/sort-comp, react/prop-types */
 	handlers = {
-		onAddItem: (item, centered) => {
+		onInput: (src, file) => {
+			const { canvasRef } = this.props;
+			const id = uuid();
+			const option = Object.assign({}, this.state.activeItem.option, { id, src, file });
+			canvasRef.handler.add(option);
+			this.handlers.onInputDone();
+		},
+		onInputDone: () => {
+			this.setState({
+				activeItem: {},
+				fileOrUrlModalVisible: false,
+			});
+		},
+		waitForInput: (item) => {
+			this.setState({
+				activeItem: item,
+				fileOrUrlModalVisible: true,
+			});
+		},
+		onAddItem: (item) => {
 			const { canvasRef } = this.props;
 			if (canvasRef.handler.interactionMode === 'polygon') {
 				message.info('Already drawing');
 				return;
 			}
+			if (item.fileAccept) {
+				this.handlers.waitForInput(item);
+				return;
+			}
 			const id = uuid();
 			const option = Object.assign({}, item.option, { id });
-			canvasRef.handler.add(option, centered);
+			canvasRef.handler.add(option);
 		},
 		onDrawingItem: item => {
 			const { canvasRef } = this.props;
@@ -211,7 +239,7 @@ class ImageMapItems extends Component {
 		</Flex>
 	);
 
-	renderItem = (item, centered) =>
+	renderItem = (item) =>
 		item.type === 'drawing' ? (
 			<div
 				key={item.name}
@@ -229,7 +257,7 @@ class ImageMapItems extends Component {
 			<div
 				key={item.name}
 				draggable
-				onClick={e => this.handlers.onAddItem(item, centered)}
+				onClick={e => this.handlers.onAddItem(item)}
 				onDragStart={e => this.events.onDragStart(e, item)}
 				onDragEnd={e => this.events.onDragEnd(e, item)}
 				className="rde-editor-items-item"
@@ -298,6 +326,11 @@ class ImageMapItems extends Component {
 						</Flex>
 					</Scrollbar>
 				</Flex>
+				<FileOrUrlModal
+					visible={this.state.fileOrUrlModalVisible}
+					onSubmit={this.handlers.onInput}
+					onCancel={this.handlers.onInputDone}
+					fileAccept={this.state.activeItem.fileAccept} />
 			</div>
 		);
 	}

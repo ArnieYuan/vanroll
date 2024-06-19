@@ -4,7 +4,8 @@ import { InboxOutlined } from '@ant-design/icons';
 
 interface FileOrUrlModalProps {
     // Callback function for uploaded file or entered URL
-    onSubmit: (file?: UploadFile | string) => void;
+    onSubmit: (src: string, file?: UploadFile) => void;
+    onCancel: () => void;
     // Optional initial value for URL input
     initialValue?: string;
     // Optional limit for file size (MB)
@@ -12,16 +13,17 @@ interface FileOrUrlModalProps {
     // Optional accepted file types
     // Url only mode if not set
     fileAccept?: string;
+    visible: boolean;
 }
 
 const FileOrUrlModal: React.FC<FileOrUrlModalProps> = ({
     onSubmit,
+    onCancel,
     initialValue = '',
     fileSizeLimit = 5,
     fileAccept,
+    visible = false
 }) => {
-    const [isUploadMode, setIsUploadMode] = useState(fileAccept ? true : false);
-    const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [url, setUrl] = useState(initialValue);
 
     const handleUploadChange = (info) => {
@@ -30,11 +32,11 @@ const FileOrUrlModal: React.FC<FileOrUrlModalProps> = ({
             message.error(`Limited to ${fileSizeLimit}MB or less`);
             return false;
         }
-        setFileList([info.file]);
+        onSubmit("", info.file);
     };
 
-    const handleOnRemove = () => {
-        setFileList([]);
+    const handleBeforeUpload = () => {
+        return false;
     };
 
     const handleUrlChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -42,57 +44,29 @@ const FileOrUrlModal: React.FC<FileOrUrlModalProps> = ({
     };
 
     const handleCancel = () => {
-        setIsUploadMode(true);
-        setFileList([]);
-        setUrl(initialValue);
+        setUrl("");
+        onCancel();
     };
 
     const handleSubmit = () => {
-        if (isUploadMode) {
-            if (!fileList.length) {
-                message.error('Please select a file to upload');
-                return;
-            }
-            onSubmit(fileList[0]);
-        } else {
-            onSubmit(url);
-        }
-        setIsUploadMode(true);
-        setFileList([]);
-        setUrl(initialValue);
-    };
-
-    const handleToggleMode = () => {
-        setIsUploadMode(!isUploadMode);
-        setFileList([]);
-        setUrl(initialValue);
+        onSubmit(url);
+        setUrl("");
     };
 
     return (
-        <Modal open={true} onCancel={handleCancel} footer={null}>
-            {isUploadMode ? (
+        <Modal open={visible} onCancel={handleCancel} footer={null}>
+            {fileAccept &&
                 <>
-                    <Upload.Dragger {...{ onChange: handleUploadChange, onRemove: handleOnRemove, accept: fileAccept, fileList }}>
+                    <Upload.Dragger {...{ onChange: handleUploadChange, beforeUpload: handleBeforeUpload, accept: fileAccept, multiple: false, fileList: [] }}>
                         <p className="ant-upload-drag-icon">
                             <InboxOutlined />
                         </p>
                         <p className="ant-upload-text">Click or drag file to this area to upload</p>
                         <p className="ant-upload-hint">{`Support for a single upload. Limited to ${fileSizeLimit}MB or less`}</p>
                     </Upload.Dragger>
-                    <Button type="link" onClick={handleToggleMode}>
-                        Or enter a URL
-                    </Button>
-                </>
-            ) : (
-                <>
-                    <Input.TextArea value={url} onChange={handleUrlChange} autoSize />
-                    if (fileAccept) {
-                        <Button type="link" onClick={handleToggleMode}>
-                            Or upload a file
-                        </Button>
-                    }
-                </>
-            )}
+                    <p> Or enter a URL </p>
+                </>}
+            <Input.TextArea value={url} onChange={handleUrlChange} autoSize />
             <Button type="primary" onClick={handleSubmit}>
                 Submit
             </Button>

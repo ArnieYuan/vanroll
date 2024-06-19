@@ -25,6 +25,7 @@
 				"prefix": "fas",
 				"name": "image"
 			},
+			"fileAccept": "image/*",
 			"option": {
 				"type": "image",
 				"name": "New image",
@@ -39,6 +40,7 @@
 				"prefix": "fas",
 				"name": "image"
 			},
+			"fileAccept": "image/gif",
 			"option": {
 				"type": "gif",
 				"width": 400,
