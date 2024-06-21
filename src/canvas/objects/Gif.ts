@@ -1,34 +1,54 @@
 import { fabric } from 'fabric';
-import 'gifler';
+import { parseGIF, decompressFrames } from 'gifuct-js';
+import { FabricImage } from '../utils';
+
+function readFileAsPromise(file: File): Promise<ArrayBuffer> {
+	return new Promise((resolve, reject) => {
+		const reader = new FileReader();
+
+		reader.onload = (event) => {
+			resolve(event.target.result as ArrayBuffer);
+		};
+
+		reader.onerror = (error) => {
+			reject(error);
+		};
+
+		reader.readAsArrayBuffer(file);
+	});
+}
+
+async function loadGif(source?: File | string) {
+	if (source instanceof File) {
+		return readFileAsPromise(source);
+	} else {
+		const response = await fetch(source, {
+			mode: 'cors',
+		});
+		return response.arrayBuffer();
+	}
+}
 
 const Gif = fabric.util.createClass(fabric.Object, {
 	type: 'gif',
 	superType: 'image',
-	gifCanvas: null,
-	isStarted: false,
-	initialize(options: any) {
-		options = options || {};
+	initialize(options: FabricImage) {
 		this.callSuper('initialize', options);
-		this.gifCanvas = document.createElement('canvas');
-	},
-	drawFrame(ctx: CanvasRenderingContext2D, frame: any) {
-		// update canvas size
-		this.gifCanvas.width = frame.width;
-		this.gifCanvas.height = frame.height;
-		// update canvas that we are using for fabric.js
-		ctx.drawImage(frame.buffer, -frame.width / 2, -frame.height / 2, frame.width, frame.height);
+		const { src, file } = options;
+		loadGif(src || file).then((arrayBuffer) => {
+			this.gifData = parseGIF(arrayBuffer);
+			this.frames = decompressFrames(this.gifData, true);
+			this.width = this.frames[0].dims.width;
+			this.height = this.frames[0].dims.height;
+		});
 	},
 	_render(ctx: CanvasRenderingContext2D) {
 		this.callSuper('_render', ctx);
-		if (!this.isStarted) {
-			this.isStarted = true;
-			window
-				// @ts-ignore
-				.gifler('./images/sample/earth.gif')
-				.frames(this.gifCanvas, (_c: CanvasRenderingContext2D, frame: any) => {
-					this.isStarted = true;
-					this.drawFrame(ctx, frame);
-				});
+		if (this.frames) {
+			const frame = this.frames[0];
+			let imageData = ctx.createImageData(frame.dims.width, frame.dims.height);
+			imageData.data.set(frame.patch);
+			ctx.putImageData(imageData, this.left, this.top);
 		}
 	},
 });
