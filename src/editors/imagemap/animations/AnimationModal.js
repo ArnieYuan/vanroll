@@ -1,103 +1,104 @@
-import React, { Component } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Modal, Input } from 'antd';
+import { Modal, Input, Form } from 'antd';
 import i18n from 'i18next';
 
 import Canvas from '../../../canvas/Canvas';
 import AnimationProperty from '../properties/AnimationProperty';
 
-class AnimationModal extends Component {
-	static propTypes = {
-		form: PropTypes.any,
+const initialAnimation = {
+	type: 'none',
+	loop: true,
+	autoplay: true,
+	delay: 100,
+	duration: 1000,
+}; // as AnimeParams;
+
+const AnimationModal = (props) => {
+	AnimationModal.propTypes = {
 		visible: PropTypes.bool,
 		animation: PropTypes.object,
 		onOk: PropTypes.func,
 		onCancel: PropTypes.func,
 	};
 
-	state = {
-		width: 150,
-		height: 150,
-	};
+	const { visible, animation, onChange } = props;
+	const [form] = Form.useForm();
+	const [width, setWidth] = useState(150);
+	const [height, setHeight] = useState(150);
 
-	componentDidMount() {
-		this.waitForContainerRender(this.containerRef);
-	}
+	const containerRef = useRef(null);
+	const canvasRef = useRef(null);
 
-	UNSAFE_componentWillReceiveProps(nextProps) {
-		if (!nextProps.visible) {
-			if (this.canvasRef) {
-				this.canvasRef.handler.animationHandler.stop('animations');
-			}
-			return;
-		}
-		if (JSON.stringify(nextProps.animation) !== JSON.stringify(this.props.animation)) {
-			this.waitForCanvasRender(this.canvasRef, nextProps.animation);
-		}
-		nextProps.form.resetFields();
-	}
+	useEffect(() => {
+		waitForContainerRender(containerRef);
+	}, []);
 
-	waitForCanvasRender = (canvas, animation) => {
+	useEffect(() => {
+		waitForCanvasRender(canvasRef, animation);
+		form.resetFields();
+	}, [animation]);
+
+	const waitForCanvasRender = (canvas, animation) => {
 		setTimeout(() => {
-			if (canvas) {
-				canvas.handlers.setById('animations', 'animation', animation);
+			if (!canvas) {
+				waitForCanvasRender(canvasRef, animation);
 				return;
 			}
-			this.waitForCanvasRender(this.canvasRef, animation);
+			canvas.handlers.setById('animations', 'animation', animation);
 		}, 5);
 	};
 
-	waitForContainerRender = container => {
+	const waitForContainerRender = container => {
 		setTimeout(() => {
-			if (container) {
-				this.setState(
-					{
-						width: container.clientWidth,
-						height: container.clientHeight,
-					},
-					() => {
-						const option = {
-							type: 'i-text',
-							text: '\uf3c5',
-							fontFamily: 'Font Awesome 5 Free',
-							fontWeight: 900,
-							fontSize: 60,
-							width: 30,
-							height: 30,
-							editable: false,
-							name: 'New marker',
-							tooltip: {
-								enabled: false,
-							},
-							left: 200,
-							top: 50,
-							id: 'animations',
-							fill: 'rgba(0, 0, 0, 1)',
-							stroke: 'rgba(255, 255, 255, 0)',
-						};
-						this.canvasRef.handler.add(option);
-					},
-				);
+			if (!container) {
+				waitForContainerRender(containerRef);
 				return;
 			}
-			this.waitForContainerRender(this.containerRef);
+			setWidth(container.clientWidth);
+			setHeight(container.clientHeight);
+			const option = {
+				type: 'i-text',
+				text: '\uf3c5',
+				fontFamily: 'Font Awesome 5 Free',
+				fontWeight: 900,
+				fontSize: 60,
+				width: 30,
+				height: 30,
+				editable: false,
+				name: 'New marker',
+				tooltip: {
+					enabled: false,
+				},
+				left: 200,
+				top: 50,
+				id: 'animations',
+				fill: 'rgba(0, 0, 0, 1)',
+				stroke: 'rgba(255, 255, 255, 0)',
+			};
+			canvasRef.handler.add(option);
 		}, 5);
 	};
 
-	render() {
-		const { form, visible, animation, onOk, onCancel, validateTitle, onChange } = this.props;
-		const { width, height } = this.state;
-		return (
-			<Modal onOk={onOk} onCancel={onCancel} open={visible}>
+	const handleFormSubmit = () => {
+		form.validateFields()
+		  .then((values) => {
+			// Handle form submission logic with values
+			onOk(values);
+		  })
+		  .catch((errorInfo) => {
+			console.error('Validation failed:', errorInfo);
+		  });
+	  };
+
+	return (
+		<Modal onOk={handleFormSubmit} onCancel={onCancel} open={visible}>
+			<Form form={form}>
 				<Form.Item
 					label={i18n.t('common.title')}
 					required
 					colon={false}
 					hasFeedback
-					help={validateTitle.help}
-					validateStatus={validateTitle.validateStatus}
 				>
 					<Input
 						value={animation.title}
@@ -110,29 +111,18 @@ class AnimationModal extends Component {
 						}}
 					/>
 				</Form.Item>
-				{AnimationProperty.render(this.canvasRef, form, { animation, id: 'animations' })}
-				<div
-					ref={c => {
-						this.containerRef = c;
-					}}
-				>
+				{AnimationProperty.render(canvasRef, form, { animation, id: 'animations' })}
+				<div ref={containerRef}>
 					<Canvas
-						ref={c => {
-							this.canvasRef = c;
-						}}
+						ref={canvasRef}
 						editable={false}
 						canvasOption={{ width, height, backgroundColor: '#f3f3f3' }}
 						workareaOption={{ backgroundColor: 'transparent' }}
 					/>
 				</div>
-			</Modal>
-		);
-	}
+			</Form>
+		</Modal>
+	);
 }
 
-export default Form.create({
-	onValuesChange: (props, changedValues, allValues) => {
-		const { onChange } = props;
-		onChange(props, changedValues, allValues);
-	},
-})(AnimationModal);
+export default AnimationModal;
