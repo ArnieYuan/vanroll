@@ -1,18 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Input, Form } from 'antd';
-import i18n from 'i18next';
+import { Modal, Form } from 'antd';
 
 import Canvas from '../../../canvas/Canvas';
-import AnimationProperty from '../properties/AnimationProperty';
-
-const initialAnimation = {
-	type: 'none',
-	loop: true,
-	autoplay: true,
-	delay: 100,
-	duration: 1000,
-}; // as AnimeParams;
 
 const AnimationModal = (props) => {
 	AnimationModal.propTypes = {
@@ -82,45 +72,26 @@ const AnimationModal = (props) => {
 
 	const handleFormSubmit = () => {
 		form.validateFields()
-		  .then((values) => {
-			// Handle form submission logic with values
-			onOk(values);
-		  })
-		  .catch((errorInfo) => {
-			console.error('Validation failed:', errorInfo);
-		  });
-	  };
+			.then((values) => {
+				// Handle form submission logic with values
+				onOk(values);
+			})
+			.catch((errorInfo) => {
+				console.error('Validation failed:', errorInfo);
+			});
+	};
 
 	return (
 		<Modal onOk={handleFormSubmit} onCancel={onCancel} open={visible}>
-			<Form form={form}>
-				<Form.Item
-					label={i18n.t('common.title')}
-					required
-					colon={false}
-					hasFeedback
-				>
-					<Input
-						value={animation.title}
-						onChange={e => {
-							onChange(
-								null,
-								{ animation: { title: e.target.value } },
-								{ animation: { ...animation, title: e.target.value } },
-							);
-						}}
-					/>
-				</Form.Item>
-				{AnimationProperty.render(canvasRef, form, { animation, id: 'animations' })}
-				<div ref={containerRef}>
-					<Canvas
-						ref={canvasRef}
-						editable={false}
-						canvasOption={{ width, height, backgroundColor: '#f3f3f3' }}
-						workareaOption={{ backgroundColor: 'transparent' }}
-					/>
-				</div>
-			</Form>
+			<AnimationForm canvasRef={canvasRef} form={form} animation={animation} />
+			<div ref={containerRef}>
+				<Canvas
+					ref={canvasRef}
+					editable={false}
+					canvasOption={{ width, height, backgroundColor: '#f3f3f3' }}
+					workareaOption={{ backgroundColor: 'transparent' }}
+				/>
+			</div>
 		</Modal>
 	);
 }
