@@ -1,11 +1,8 @@
-import { Badge, Button, Menu, Popconfirm } from 'antd';
+import { Badge, Button, Menu, Layout, Spin } from 'antd';
 import i18n from 'i18next';
 import debounce from 'lodash/debounce';
 import React, { useEffect, useRef, useReducer, useState, useContext } from 'react';
 import Canvas from '../../canvas/Canvas';
-import CommonButton from '../../components/common/CommonButton';
-import { Content } from '../../components/layout';
-import SandBox from '../../components/sandbox/SandBox';
 import '../../libs/fontawesome-5.2.0/css/all.css';
 import '../../styles/index.less';
 import ImageMapConfigurations from './ImageMapConfigurations';
@@ -608,7 +605,22 @@ const ImageMapEditor = (props) => {
 			/>
 		</div>
 	);
-	return <Content title={title} content={content} loading={loading} className="" />;
+	return (<Spin spinning={loading}>
+		<Layout className="rde-content-layout">
+			{title}
+			<Layout
+				style={{
+					overflowY: 'auto',
+					overflowX: 'hidden',
+					minHeight: `calc(100vh - ${title ? 98 : 60}px)`,
+					height: `calc(100vh - ${title ? 98 : 60}px)`,
+				}}
+				className='rde-content-layout-main'
+			>
+				{content}
+			</Layout>
+		</Layout>
+	</Spin>);
 }
 
 export default ImageMapEditor;
