@@ -12,7 +12,7 @@ const AnimationModal = (props) => {
 		onCancel: PropTypes.func,
 	};
 
-	const { visible, animation, onChange } = props;
+	const { visible, animation, onOk, onCancel } = props;
 	const [form] = Form.useForm();
 	const [width, setWidth] = useState(150);
 	const [height, setHeight] = useState(150);
