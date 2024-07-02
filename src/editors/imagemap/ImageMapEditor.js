@@ -12,6 +12,7 @@ import ImageMapItems from './ImageMapItems';
 import ImageMapPreview from './ImageMapPreview';
 import ImageMapTitle from './ImageMapTitle';
 import { LocalStorageContext } from '../../contexts/LocalStorageContext';
+import Timeline from './Timeline';
 
 const propertiesToInclude = [
 	'id',
@@ -605,7 +606,8 @@ const ImageMapEditor = (props) => {
 			/>
 		</div>
 	);
-	return (<Spin spinning={loading}>
+	return (
+	<Spin spinning={loading}>
 		<Layout className="rde-content-layout">
 			{title}
 			<Layout
@@ -619,6 +621,7 @@ const ImageMapEditor = (props) => {
 			>
 				{content}
 			</Layout>
+			<Timeline />
 		</Layout>
 	</Spin>);
 }

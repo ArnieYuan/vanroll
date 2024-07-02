@@ -62,7 +62,8 @@
 		"resize-observer-polyfill": "^1.5.1",
 		"store": "^2.0.12",
 		"uuid": "^9.0.1",
-		"warning": "^4.0.3"
+		"warning": "^4.0.3",
+		"wavesurfer.js": "^7.8.0"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.16.0",
