@@ -12,7 +12,7 @@ import ImageMapItems from './ImageMapItems';
 import ImageMapPreview from './ImageMapPreview';
 import ImageMapTitle from './ImageMapTitle';
 import { LocalStorageContext } from '../../contexts/LocalStorageContext';
-import Timeline from './Timeline';
+import TimelineEditor from './Timeline';
 
 const propertiesToInclude = [
 	'id',
@@ -621,7 +621,7 @@ const ImageMapEditor = (props) => {
 			>
 				{content}
 			</Layout>
-			<Timeline />
+			<TimelineEditor />
 		</Layout>
 	</Spin>);
 }
