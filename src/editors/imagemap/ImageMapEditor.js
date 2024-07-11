@@ -614,8 +614,8 @@ const ImageMapEditor = (props) => {
 				style={{
 					overflowY: 'auto',
 					overflowX: 'hidden',
-					minHeight: `calc(100vh - ${title ? 98 : 60}px)`,
-					height: `calc(100vh - ${title ? 98 : 60}px)`,
+					minHeight: `calc(100vh - ${title ? 300 : 60}px)`,
+					height: `calc(100vh - ${title ? 300 : 60}px)`,
 				}}
 				className='rde-content-layout-main'
 			>
