@@ -21,28 +21,7 @@ export const mockEffect: Record<string, TimelineEffect> = {
   effect0: {
     id: 'effect0',
     name: '播放音效',
-    source: {
-      start: ({ action, engine, isPlaying, time }) => {
-        if (isPlaying) {
-          const src = (action as CustomTimelineAction).data.src;
-          audioControl.start({ id: src, src, startTime: action.start, engine, time });
-        }
-      },
-      enter: ({ action, engine, isPlaying, time }) => {
-        if (isPlaying) {
-          const src = (action as CustomTimelineAction).data.src;
-          audioControl.start({ id: src, src, startTime: action.start, engine, time });
-        }
-      },
-      leave: ({ action, engine }) => {
-        const src = (action as CustomTimelineAction).data.src;
-        audioControl.stop({ id: src, engine });
-      },
-      stop: ({ action, engine }) => {
-        const src = (action as CustomTimelineAction).data.src;
-        audioControl.stop({ id: src, engine });
-      },
-    },
+    source: audioControl,
   },
   effect1: {
     id: 'effect1',

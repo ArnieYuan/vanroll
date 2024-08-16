@@ -1,7 +1,8 @@
 import { Howl } from 'howler';
-import { TimelineEngine } from '@xzdarcy/react-timeline-editor';
+import { TimelineEngine, TimeLineEffectSource } from '@xzdarcy/react-timeline-editor';
+import { CustomTimelineAction } from './mock';
 
-class AudioControl {
+class AudioControl implements TimeLineEffectSource {
   cacheMap: Record<string, Howl> = {};
   listenerMap: Record<
     string,
@@ -11,7 +12,28 @@ class AudioControl {
     }
   > = {};
 
-  start(data: { id: string; engine: TimelineEngine; src: string; startTime: number; time: number }) {
+  start({ action, engine, isPlaying, time }) {
+    if (isPlaying) {
+      const src = (action as CustomTimelineAction).data.src;
+      this.startAudio({ id: src, src, startTime: action.start, engine, time });
+    }
+  }
+  enter({ action, engine, isPlaying, time }) {
+    if (isPlaying) {
+      const src = (action as CustomTimelineAction).data.src;
+      this.startAudio({ id: src, src, startTime: action.start, engine, time });
+    }
+  }
+  leave({ action, engine }) {
+    const src = (action as CustomTimelineAction).data.src;
+    this.stopAudio({ id: src, engine });
+  }
+  stop({ action, engine }) {
+    const src = (action as CustomTimelineAction).data.src;
+    this.stopAudio({ id: src, engine });
+  }
+  
+  startAudio(data: { id: string; engine: TimelineEngine; src: string; startTime: number; time: number }) {
     const { id, src, startTime, time, engine } = data;
     let item: Howl;
     if (this.cacheMap[id]) {
@@ -43,7 +65,7 @@ class AudioControl {
     this.listenerMap[id].rate = rateListener;
   }
 
-  stop(data: { id: string; engine: TimelineEngine }) {
+  stopAudio(data: { id: string; engine: TimelineEngine }) {
     const { id, engine } = data;
     if (this.cacheMap[id]) {
       const item = this.cacheMap[id];
