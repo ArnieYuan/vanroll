@@ -26,20 +26,7 @@ export const mockEffect: Record<string, TimelineEffect> = {
   effect1: {
     id: 'effect1',
     name: '播放动画',
-    source: {
-      enter: ({ action, time }) => {
-        const src = (action as CustomTimelineAction).data.src;
-        lottieControl.enter({ id: src, src, startTime: action.start, endTime: action.end, time });
-      },
-      update: ({ action, time }) => {
-        const src = (action as CustomTimelineAction).data.src;
-        lottieControl.update({ id: src, src, startTime: action.start, endTime: action.end, time });
-      },
-      leave: ({ action, time }) => {
-        const src = (action as CustomTimelineAction).data.src;
-        lottieControl.leave({ id: src, startTime: action.start, endTime: action.end, time });
-      },
-    },
+    source: lottieControl,
   },
 };
 

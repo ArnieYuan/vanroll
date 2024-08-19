@@ -1,7 +1,22 @@
 import lottie, { AnimationItem } from 'lottie-web';
+import { TimelineEngine, TimeLineEffectSource } from '@xzdarcy/react-timeline-editor';
+import { CustomTimelineAction } from './mock';
 
-class LottieControl {
+class LottieControl implements TimeLineEffectSource {
     cacheMap: Record<string, AnimationItem> = {};
+
+    enter({ action, time }) {
+        const src = (action as CustomTimelineAction).data.src;
+        this.enterLottie({ id: src, src, startTime: action.start, endTime: action.end, time });
+    }
+    update({ action, time }) {
+        const src = (action as CustomTimelineAction).data.src;
+        this.updateLottie({ id: src, src, startTime: action.start, endTime: action.end, time });
+    }
+    leave({ action, time }) {
+        const src = (action as CustomTimelineAction).data.src;
+        this.leaveLottie({ id: src, startTime: action.start, endTime: action.end, time });
+    }
 
     private _goToAndStop(item: AnimationItem, time: number) {
         if (!item.getDuration()) return;
@@ -11,7 +26,7 @@ class LottieControl {
         item.goToAndStop(time);
     }
 
-    enter(data: { id: string; src: string; startTime: number; endTime: number; time: number }) {
+    enterLottie(data: { id: string; src: string; startTime: number; endTime: number; time: number }) {
         const { id, src, startTime, time } = data;
         let item: AnimationItem;
         if (this.cacheMap[id]) {
@@ -40,14 +55,14 @@ class LottieControl {
         }
     }
 
-    update(data: { id: string; src: string; startTime: number; endTime: number; time: number }) {
+    updateLottie(data: { id: string; src: string; startTime: number; endTime: number; time: number }) {
         const { id, startTime, endTime, time } = data;
         const item = this.cacheMap[id];
         if (!item) return;
         this._goToAndStop(item, time - startTime);
     }
 
-    leave(data: { id: string; startTime: number; endTime: number; time: number }) {
+    leaveLottie(data: { id: string; startTime: number; endTime: number; time: number }) {
         const { id, startTime, endTime, time } = data;
         const item = this.cacheMap[id];
         if (!item) return;
