@@ -35,23 +35,23 @@ class LottieControl implements TimeLineEffectSource {
             this._goToAndStop(item, time);
         } else {
             // TODO: pass in the canvas
-            const ground = document.getElementById('player-ground-1');
-            item = lottie.loadAnimation({
-                name: id,
-                container: ground,
-                renderer: 'canvas',
-                loop: true,
-                autoplay: false,
-                path: src,
-                rendererSettings: {
-                    className: 'lottie-ani',
-                },
-            });
+            // const ground = document.getElementById('player-ground-1');
+            // item = lottie.loadAnimation({
+            //     name: id,
+            //     container: ground,
+            //     renderer: 'canvas',
+            //     loop: true,
+            //     autoplay: false,
+            //     path: src,
+            //     rendererSettings: {
+            //         className: 'lottie-ani',
+            //     },
+            // });
 
-            item.addEventListener('loaded_images', () => {
-                this._goToAndStop(item, time - startTime);
-            });
-            this.cacheMap[id] = item;
+            // item.addEventListener('loaded_images', () => {
+            //     this._goToAndStop(item, time - startTime);
+            // });
+            // this.cacheMap[id] = item;
         }
     }
 
