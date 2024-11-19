@@ -1,6 +1,8 @@
 import { TimelineAction, TimelineEffect, TimelineRow } from '@xzdarcy/react-timeline-editor';
 import audioControl from './audioControl';
 import lottieControl from './lottieControl';
+import animeControl from './animeControl';
+import anime from 'animejs';
 
 export const scaleWidth = 160;
 export const scale = 5;
@@ -10,6 +12,7 @@ export interface CustomTimelineAction extends TimelineAction {
   data: {
     src: string;
     name: string;
+    animeParams: anime.AnimeParams;
   };
 }
 
@@ -28,6 +31,11 @@ export const mockEffect: Record<string, TimelineEffect> = {
     name: '播放动画',
     source: lottieControl,
   },
+  effect2: {
+    id: 'effect2',
+    name: '播放动画',
+    source: animeControl,
+  }
 };
 
 export const mockData: CusTomTimelineRow[] = [
