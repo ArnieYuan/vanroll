@@ -2,9 +2,9 @@ import { Timeline, TimelineState } from '@xzdarcy/react-timeline-editor';
 import { Switch } from 'antd';
 import { cloneDeep } from 'lodash';
 import React, { useRef, useState } from 'react';
-import { CustomRender0, CustomRender1 } from './custom';
+import { CustomTimelineAction, CustomTimelineRow, CustomRender0, CustomRender1 } from './customRenders';
 import './index.less';
-import { CustomTimelineAction, CusTomTimelineRow, mockData, mockEffect, scale, scaleWidth, startLeft } from './mock';
+import { mockData, mockEffect, scale, scaleWidth, startLeft } from './mock';
 import TimelinePlayer from './player';
 
 const defaultEditorData = cloneDeep(mockData);
@@ -35,13 +35,13 @@ const TimelineEditor = () => {
         editorData={data}
         effects={mockEffect}
         onChange={(data) => {
-          setData(data as CusTomTimelineRow[]);
+          setData(data as CustomTimelineRow[]);
         }}
         getActionRender={(action, row) => {
           if (action.effectId === 'effect0') {
-            return <CustomRender0 action={action as CustomTimelineAction} row={row as CusTomTimelineRow} />;
+            return <CustomRender0 action={action as CustomTimelineAction} row={row as CustomTimelineRow} />;
           } else if (action.effectId === 'effect1') {
-            return <CustomRender1 action={action as CustomTimelineAction} row={row as CusTomTimelineRow} />;
+            return <CustomRender1 action={action as CustomTimelineAction} row={row as CustomTimelineRow} />;
           }
         }}
       />

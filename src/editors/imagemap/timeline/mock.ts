@@ -1,24 +1,12 @@
-import { TimelineAction, TimelineEffect, TimelineRow } from '@xzdarcy/react-timeline-editor';
+import { TimelineEffect } from '@xzdarcy/react-timeline-editor';
 import audioControl from './audioControl';
 import lottieControl from './lottieControl';
 import animeControl from './animeControl';
-import anime from 'animejs';
+import { CustomTimelineRow } from './customRenders';
 
 export const scaleWidth = 160;
 export const scale = 5;
 export const startLeft = 20;
-
-export interface CustomTimelineAction extends TimelineAction {
-  data: {
-    src?: string;
-    name: string;
-    animeParams?: anime.AnimeParams;
-  };
-}
-
-export interface CusTomTimelineRow extends TimelineRow {
-  actions: CustomTimelineAction[];
-}
 
 export const mockEffect: Record<string, TimelineEffect> = {
   effect0: {
@@ -38,7 +26,7 @@ export const mockEffect: Record<string, TimelineEffect> = {
   }
 };
 
-export const mockData: CusTomTimelineRow[] = [
+export const mockData: CustomTimelineRow[] = [
   {
     id: '0',
     actions: [

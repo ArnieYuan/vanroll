@@ -1,6 +1,6 @@
 import { Howl } from 'howler';
 import { TimelineEngine, TimeLineEffectSource } from '@xzdarcy/react-timeline-editor';
-import { CustomTimelineAction } from './mock';
+import { CustomTimelineAction } from './customRenders';
 
 class AudioControl implements TimeLineEffectSource {
   cacheMap: Record<string, Howl> = {};
