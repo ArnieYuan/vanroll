@@ -1,4 +1,5 @@
 import { TimelineEngine, TimeLineEffectSource } from '@xzdarcy/react-timeline-editor';
+import { CustomTimelineAction } from './mock';
 
 class AnimeControl implements TimeLineEffectSource {
     start({ action, engine, isPlaying, time }) {

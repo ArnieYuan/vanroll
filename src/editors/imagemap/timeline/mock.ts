@@ -10,9 +10,9 @@ export const startLeft = 20;
 
 export interface CustomTimelineAction extends TimelineAction {
   data: {
-    src: string;
+    src?: string;
     name: string;
-    animeParams: anime.AnimeParams;
+    animeParams?: anime.AnimeParams;
   };
 }
 
