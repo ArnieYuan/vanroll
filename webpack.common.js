@@ -11,7 +11,7 @@ module.exports = {
 	module: {
 		rules: [
 			{
-				test: /\.(js|jsx|tsx|ts)$/,
+				test: /\.(js|ts)$/,
 				loader: 'babel-loader',
 				include: path.resolve(__dirname, 'src'),
 				options: {
@@ -27,11 +27,9 @@ module.exports = {
 								targets: { browsers: ['last 5 versions', 'ie >= 11'], node: 'current' },
 							},
 						],
-						'@babel/preset-react',
 						[
 							'@babel/preset-typescript',
 							{
-								isTSX: true,
 								allExtensions: true,
 								allowDeclareFields: true,
 							},
@@ -46,8 +44,6 @@ module.exports = {
 						['@babel/plugin-proposal-private-property-in-object', { loose: true }],
 						'@babel/plugin-syntax-dynamic-import',
 						'@babel/plugin-syntax-async-generators',
-						'@babel/plugin-proposal-object-rest-spread',
-						'react-hot-loader/babel',
 						'dynamic-import-webpack',
 						['import', { libraryName: 'antd', style: true }],
 					],
@@ -74,11 +70,6 @@ module.exports = {
 					limit: 10000,
 				},
 			},
-			{
-				test: /\.(js|jsx|tsx|ts)?$/,
-				include: /node_modules/,
-				use: ['react-hot-loader/webpack'],
-			},
 		],
 	},
 	optimization: {
@@ -95,7 +86,7 @@ module.exports = {
 		noEmitOnErrors: true,
 	},
 	resolve: {
-		extensions: ['.ts', '.tsx', '.js', 'jsx'],
+		extensions: ['.ts', '.js'],
 	},
 	node: {
 		net: 'empty',

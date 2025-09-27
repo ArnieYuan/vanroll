@@ -22,8 +22,8 @@ const plugins = [
 module.exports = merge(baseConfig, {
 	mode: 'production',
 	entry: {
-		vendor: ['react', 'react-dom', 'lodash', 'fabric', 'antd'],
-		app: ['core-js/stable', path.resolve(__dirname, 'src/index.tsx')],
+		vendor: ['lodash'],
+		app: ['core-js/stable', path.resolve(__dirname, 'src/index.ts')],
 	},
 	output: {
 		path: path.resolve(__dirname, 'dist'),

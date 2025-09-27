@@ -12,10 +12,9 @@ module.exports = merge(baseConfig, {
 	entry: {
 		app: [
 			'core-js/stable',
-			'react-hot-loader/patch',
 			`webpack-dev-server/client?http://${host}:${devPort}`,
 			'webpack/hot/only-dev-server',
-			path.resolve(__dirname, 'src/index.tsx'),
+			path.resolve(__dirname, 'src/index.ts'),
 		],
 	},
 	output: {

@@ -7,7 +7,7 @@ module.exports = merge(baseConfig, {
     plugins: [
         new webpack.EnvironmentPlugin({
             NODE_ENV: 'production',
-            REACT_APP_BASENAME: '/vanroll',
+            APP_BASENAME: '/vanroll',
         }),
     ],
 });
