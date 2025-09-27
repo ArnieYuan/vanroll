@@ -1,0 +1,4 @@
+{
+    "entryPoints": ["src/canvas/index.tsx"],
+    "out": "dist/docs"
+}
