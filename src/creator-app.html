@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creator Mode | Vanroll</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Use the same color configuration as the landing page for consistency
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'v-light-bg': '#f8f8f8',
+                        'v-card-bg': '#ffffff',
+                        'v-dark-text': '#1f2937',
+                        'v-accent': '#3b82f6',
+                        'v-subtle': '#6b7280',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Define fixed heights for internal components */
+        :root {
+            --control-bar-height: 40px;
+        }
+
+        /* Ensure the body takes up the full viewport height and centers content */
+        body {
+            min-height: 100vh;
+        }
+
+        /* Set default size, enable resizing, and position for floating window */
+        #iframeView {
+            /* Default positioning for floating window */
+            position: fixed; /* Use fixed so it stays in place even if the body scrolls */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Center initially */
+            z-index: 1000; /* High z-index to ensure it sits on top of everything */
+
+            /* Default dimensions */
+            width: 600px;
+            height: 400px;
+            /* Enable manual resizing by the user */
+            resize: both;
+            overflow: hidden; 
+            /* Ensure it doesn't get too big on small screens */
+            max-width: 95vw; 
+            max-height: 95vh;
+            
+            /* The children elements will use flex for vertical layout */
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Style for the drag handle */
+        #dragHandle {
+            cursor: grab; /* Indicates it's draggable */
+            height: var(--control-bar-height); /* Fixed height */
+            flex-shrink: 0;
+        }
+
+        /* Iframe takes up remaining space (container height minus control bar height) */
+        #floatingIframe {
+            width: 100%;
+            height: calc(100% - var(--control-bar-height)); 
+            flex-grow: 1; /* Takes all available remaining vertical space */
+            border: none;
+        }
+        
+        /* Style the bottom-anchored carousel container */
+        #urlCarousel {
+            height: 60px; /* Fixed height for the carousel bar */
+            display: flex; /* Enable horizontal scrolling for the items */
+            align-items: center;
+            
+            /* Hide the scrollbar but keep functionality */
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        #urlCarousel::-webkit-scrollbar {
+            display: none; /* Chrome, Safari and Opera */
+        }
+
+        /* Style for the buttons in the carousel */
+        .carousel-item {
+            cursor: pointer;
+            padding: 4px 10px;
+            border-radius: 9999px; /* rounded-full */
+            font-size: 0.8rem;
+            margin-right: 8px; /* space-x-2 */
+            transition: background-color 0.15s;
+            flex-shrink: 0; /* Important: prevents items from shrinking when scrolling */
+        }
+
+        .carousel-item-active {
+            background-color: var(--v-accent);
+            color: white;
+            font-weight: 600;
+        }
+        .carousel-item-inactive {
+            background-color: #e5e7eb; /* gray-200 */
+            color: var(--v-dark-text);
+        }
+        .carousel-item:hover:not(.carousel-item-active) {
+            background-color: #d1d5db; /* gray-300 */
+        }
+    </style>
+</head>
+<body class="bg-v-light-bg text-v-dark-text font-sans antialiased flex flex-col items-center justify-center p-4 sm:p-8">
+
+    <!-- Input View (Initial State) -->
+    <div id="inputView" class="w-full max-w-lg p-6 sm:p-10 bg-v-card-bg rounded-2xl shadow-2xl border border-gray-200">
+        <div class="flex items-center space-x-3 mb-6">
+            <svg class="w-8 h-8 text-v-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16"></path></svg>
+            <h1 class="text-3xl font-extrabold text-gray-900">Creator Mode</h1>
+        </div>
+
+        <p class="text-v-subtle mb-6">
+            Enter the URL you wish to embed. This view is ideal for keeping notes, chat, or reference materials visible while streaming or presenting.
+        </p>
+
+        <!-- URL Input -->
+        <div class="mb-8">
+            <label for="urlInput" class="block text-sm font-medium text-v-dark-text mb-2">Webpage URL (e.g., https://docs.google.com)</label>
+            <input type="url" id="urlInput" value="https://www.google.com" placeholder="https://" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-v-accent focus:border-v-accent transition duration-150" required>
+        </div>
+        
+        <!-- Action Button -->
+        <button id="launchButton" class="w-full bg-v-accent hover:bg-blue-600 text-white font-bold py-3 rounded-xl text-lg transition duration-300 shadow-xl transform hover:scale-[1.01]">
+            Embed Webpage
+        </button>
+
+        <!-- Error Message Box -->
+        <div id="messageBox" class="mt-4 hidden p-3 rounded-lg text-sm" role="alert"></div>
+    </div>
+
+    <!-- Iframe View (Hidden Initially) -->
+    <div id="iframeView" class="hidden p-0 rounded-2xl bg-v-card-bg shadow-2xl border border-gray-200">
+        <!-- Drag Handle / Control Bar -->
+        <div id="dragHandle" class="flex justify-between items-center p-2 bg-gray-100 border-b border-gray-200">
+            <span id="currentUrlDisplay" class="text-sm font-medium text-v-dark-text truncate ml-1"></span>
+            <button id="backButton" class="text-sm font-medium text-v-accent hover:text-blue-700 transition duration-150 flex items-center space-x-1 p-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2 2m2-2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <span>Close/New URL</span>
+            </button>
+        </div>
+        <!-- Iframe element added here -->
+        <iframe id="floatingIframe" title="Embedded Webpage"></iframe>
+    </div>
+    
+    <!-- URL Carousel - MOVED TO BOTTOM AND FIXED POSITION -->
+    <div id="urlCarousel" class="hidden fixed bottom-0 left-0 w-full p-3 bg-v-card-bg shadow-2xl overflow-x-auto whitespace-nowrap z-40">
+        <!-- Carousel items will be rendered here by JavaScript -->
+        <p class="text-sm text-v-subtle italic ml-2">No embedded URLs yet.</p>
+    </div>
+
+    <script>
+        const urlInput = document.getElementById('urlInput');
+        const launchButton = document.getElementById('launchButton');
+        const messageBox = document.getElementById('messageBox');
+        
+        const inputView = document.getElementById('inputView');
+        const iframeView = document.getElementById('iframeView');
+        const floatingIframe = document.getElementById('floatingIframe');
+        const backButton = document.getElementById('backButton');
+        const currentUrlDisplay = document.getElementById('currentUrlDisplay');
+        const dragHandle = document.getElementById('dragHandle');
+        const urlCarousel = document.getElementById('urlCarousel');
+
+        // Global array to store history of embedded URLs
+        const embeddedUrls = [];
+        let currentActiveUrl = null;
+
+        /**
+         * Utility function to display messages (errors or success) in the message box.
+         * @param {string} message - The text to display.
+         * @param {string} type - 'error' or 'success'.
+         */
+        function showMessage(message, type) {
+            messageBox.textContent = message;
+            messageBox.className = 'mt-4 p-3 rounded-lg text-sm';
+            
+            if (type === 'error') {
+                messageBox.classList.add('bg-red-100', 'text-red-800', 'block');
+            } else if (type === 'success') {
+                messageBox.classList.add('bg-green-100', 'text-green-800', 'block');
+            } else {
+                 messageBox.classList.add('hidden');
+            }
+        }
+
+        /**
+         * Renders the URL carousel at the bottom of the floating window.
+         */
+        function renderCarousel() {
+            urlCarousel.innerHTML = ''; // Clear existing items
+
+            if (embeddedUrls.length === 0) {
+                // Keep the placeholder text visible if no URLs
+                urlCarousel.innerHTML = '<p class="text-sm text-v-subtle italic ml-2">No embedded URLs yet.</p>';
+                return;
+            }
+
+            embeddedUrls.forEach(url => {
+                const item = document.createElement('button');
+                
+                // Truncate the full URL for clear display in the carousel
+                const MAX_LENGTH = 40;
+                let displayUrl = url;
+                if (url.length > MAX_LENGTH) {
+                    // Truncate the URL and add an ellipsis
+                    displayUrl = url.substring(0, MAX_LENGTH - 3) + '...';
+                }
+                
+                // Set the display text to the (truncated) full URL
+                item.textContent = displayUrl;
+                item.title = url; // Full URL as tooltip
+                item.dataset.url = url;
+                
+                // Add common classes
+                item.classList.add('carousel-item', 'transition', 'duration-150');
+
+                // Set active/inactive state classes
+                if (url === currentActiveUrl) {
+                    item.classList.add('carousel-item-active');
+                } else {
+                    item.classList.add('carousel-item-inactive');
+                }
+
+                // Attach click handler to switch the iframe source
+                item.addEventListener('click', () => {
+                    if (url !== currentActiveUrl) {
+                        setIframeUrl(url);
+                        renderCarousel(); // Re-render to update active state
+                    }
+                });
+
+                urlCarousel.appendChild(item);
+            });
+            // Scroll to the active item (or the end)
+            urlCarousel.scrollLeft = urlCarousel.scrollWidth;
+        }
+
+        /**
+         * Sets the iframe source and updates the active URL tracker.
+         * @param {string} url - The URL to load.
+         */
+        function setIframeUrl(url) {
+            floatingIframe.src = url;
+            currentUrlDisplay.textContent = url;
+            currentActiveUrl = url;
+        }
+
+        /**
+         * Switches the view to display the embedded iframe.
+         * @param {string} url - The URL to load into the iframe.
+         */
+        function showIframeView(url) {
+            // 1. Set the new URL as active
+            setIframeUrl(url);
+
+            // 2. Add URL to history if new
+            if (!embeddedUrls.includes(url)) {
+                embeddedUrls.push(url);
+            }
+            
+            // 3. Update UI states
+            inputView.classList.add('hidden');
+            iframeView.classList.remove('hidden');
+            urlCarousel.classList.remove('hidden'); // SHOW CAROUSEL
+            
+            // 4. Render the carousel
+            renderCarousel();
+
+            // 5. Initialize dragging
+            dragElement(iframeView, dragHandle);
+        }
+
+        /**
+         * Switches the view back to the URL input form.
+         */
+        function goBackToInput() {
+            floatingIframe.src = ''; // Clear iframe content
+            currentActiveUrl = null; // Clear active URL
+            embeddedUrls.length = 0; // Clear history
+            
+            inputView.classList.remove('hidden');
+            iframeView.classList.add('hidden');
+            urlCarousel.classList.add('hidden'); // HIDE CAROUSEL
+            
+            showMessage('', 'clear'); // Clear messages on the input view
+            
+            // Re-apply original positioning for future launch
+            iframeView.style.top = '50%';
+            iframeView.style.left = '50%';
+            iframeView.style.transform = 'translate(-50%, -50%)';
+        }
+
+        /**
+         * Makes an HTML element draggable using mouse events.
+         * @param {HTMLElement} element - The element to make draggable.
+         * @param {HTMLElement} handle - The handle element to initiate dragging.
+         */
+        function dragElement(element, handle) {
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            
+            // Start dragging when the mouse is pressed down on the handle
+            handle.onmousedown = dragMouseDown;
+
+            function dragMouseDown(e) {
+                e = e || window.event;
+                e.preventDefault();
+                
+                // Get the initial mouse cursor position at startup
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                
+                // Crucial step: remove the transform property used for initial centering
+                element.style.removeProperty('transform');
+                
+                // Call a function whenever the cursor moves
+                document.onmousemove = elementDrag;
+                document.onmouseup = closeDragElement;
+                
+                // Change cursor to 'grabbing' state
+                handle.style.cursor = 'grabbing';
+            }
+
+            function elementDrag(e) {
+                e = e || window.event;
+                e.preventDefault();
+                
+                // Calculate the new cursor position
+                pos1 = pos3 - e.clientX; // Difference in X
+                pos2 = pos4 - e.clientY; // Difference in Y
+                pos3 = e.clientX; // New X position
+                pos4 = e.clientY; // New Y position
+                
+                // Set the element's new position
+                let newTop = element.offsetTop - pos2;
+                let newLeft = element.offsetLeft - pos1;
+
+                // Boundary check (prevent dragging completely off-screen)
+                newTop = Math.max(0, newTop);
+                newLeft = Math.max(0, newLeft);
+                newTop = Math.min(newTop, window.innerHeight - element.offsetHeight);
+                newLeft = Math.min(newLeft, window.innerWidth - element.offsetWidth);
+                
+                element.style.top = newTop + "px";
+                element.style.left = newLeft + "px";
+            }
+
+            function closeDragElement() {
+                // Stop moving when mouse button is released
+                document.onmouseup = null;
+                document.onmousemove = null;
+                handle.style.cursor = 'grab'; // Change cursor back
+            }
+        }
+
+        /**
+         * Validates the URL and launches the embedded iframe view.
+         */
+        function launchEmbeddedWebpage() {
+            showMessage('', 'clear'); // Clear previous messages
+            const url = urlInput.value.trim();
+            
+            if (!url) {
+                showMessage('Please enter a valid URL.', 'error');
+                return;
+            }
+
+            // Simple URL validation and normalization
+            let validatedUrl = url;
+            try {
+                // Try to create a URL object to validate and normalize
+                const tempUrl = new URL(url.startsWith('http') ? url : 'https://' + url);
+                validatedUrl = tempUrl.href;
+            } catch (e) {
+                showMessage('Invalid URL format. Please ensure it is a proper web address.', 'error');
+                return;
+            }
+            
+            // Proceed to the iframe view
+            showIframeView(validatedUrl);
+        }
+
+        launchButton.addEventListener('click', launchEmbeddedWebpage);
+        backButton.addEventListener('click', goBackToInput);
+
+        // Initial message to warn about iframe limitations
+        window.onload = () => {
+             showMessage('Note: Some websites block embedding in an iframe due to security policies. You may see a blank page or an error for those sites.', 'error');
+        };
+    </script>
+</body>
+</html>

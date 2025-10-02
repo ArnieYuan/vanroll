@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-const merge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 const path = require('path');
 const baseConfig = require('./webpack.common.js');
 
@@ -9,14 +9,6 @@ const host = 'localhost';
 module.exports = merge(baseConfig, {
 	mode: 'development',
 	devtool: 'inline-source-map',
-	entry: {
-		app: [
-			'core-js/stable',
-			`webpack-dev-server/client?http://${host}:${devPort}`,
-			'webpack/hot/only-dev-server',
-			path.resolve(__dirname, 'src/index.ts'),
-		],
-	},
 	output: {
 		path: path.resolve(__dirname, 'public'),
 		publicPath: '/',
@@ -24,25 +16,28 @@ module.exports = merge(baseConfig, {
 		chunkFilename: '[id].[hash:16].js',
 	},
 	devServer: {
-		inline: true,
 		port: devPort,
-		contentBase: path.resolve(__dirname, 'public'),
+		static: {
+			directory: path.resolve(__dirname, 'public'),
+		},
 		hot: true,
-		publicPath: '/',
 		historyApiFallback: true,
 		host,
-		proxy: {
-			'/api': {
+		devMiddleware: {
+			publicPath: '/',
+		},
+		proxy: [
+			{
+				context: ['/api'],
 				target: 'http://localhost',
 			},
-			'/api/ws': {
+			{
+				context: ['/api/ws'],
 				target: 'ws://localhost',
 				ws: true,
 			},
-		},
-		headers: {
-			'X-Frame-Options': 'sameorigin',
-		},
+		],
+		headers: { 'X-Frame-Options': 'sameorigin' },
 	},
 	plugins: [
 		new webpack.HotModuleReplacementPlugin(),

@@ -3,11 +3,15 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const plugins = [
 	new HtmlWebpackPlugin({
-		template: "src/index.html",
+		template: path.resolve(__dirname, 'src/index.html'),
+		filename: "index.html",
 	}),
 ]
 
 module.exports = {
+	entry: {
+		main: './src/index.ts',
+	},
 	module: {
 		rules: [
 			{
@@ -36,15 +40,6 @@ module.exports = {
 						],
 					],
 					plugins: [
-						'@babel/plugin-transform-runtime',
-						['@babel/plugin-transform-typescript', { allowDeclareFields: true }],
-						['@babel/plugin-proposal-class-properties', { loose: true }],
-						['@babel/plugin-proposal-private-methods', { loose: true }],
-						['@babel/plugin-proposal-decorators', { legacy: true }],
-						['@babel/plugin-proposal-private-property-in-object', { loose: true }],
-						'@babel/plugin-syntax-dynamic-import',
-						'@babel/plugin-syntax-async-generators',
-						'dynamic-import-webpack',
 						['import', { libraryName: 'antd', style: true }],
 					],
 				},
@@ -87,11 +82,11 @@ module.exports = {
 	},
 	resolve: {
 		extensions: ['.ts', '.js'],
-	},
-	node: {
-		net: 'empty',
-		fs: 'empty',
-		tls: 'empty',
+		fallback: {
+			net: false,
+			fs: false,
+			tls: false,
+		},
 	},
 	plugins,
 };

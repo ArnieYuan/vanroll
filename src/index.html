@@ -1,22 +1,209 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Vanroll - Interactive Presenter</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/manifest.json">
-    <link rel="shortcut icon" href="./favicon.ico" />
-    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
-    <meta name="msapplication-TileColor" content="#da532c">
-    <meta name="theme-color" content="#ffffff">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/earlyaccess/notosanskr.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vanroll - Seamless Picture-in-Picture Solutions</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configure Tailwind to use Inter font and new light colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'v-light-bg': '#f8f8f8', // Very light background
+                        'v-card-bg': '#ffffff', // White card backgrounds
+                        'v-dark-text': '#1f2937', // Gray 800 for main text
+                        'v-accent': '#3b82f6', // Blue 500 (Accent - remains the same)
+                        'v-subtle': '#6b7280', // Gray 500 for subtle text
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <!-- Load Inter font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for professional light theme feel */
+        .card-glow {
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.05); /* Subtle initial shadow */
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card-glow:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 30px rgba(59, 130, 246, 0.2); /* Accent shadow on hover */
+        }
+    </style>
 </head>
+<body class="bg-v-light-bg text-v-dark-text font-sans antialiased">
 
-<body></body>
+    <!-- Navigation Bar -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-lg text-v-dark-text border-b border-gray-200">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <!-- UPDATED: Added icon next to the brand name -->
+            <div class="flex items-center space-x-2">
+                <svg class="w-6 h-6 text-v-accent" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.5" class="text-v-subtle"/>
+                    <rect x="13" y="14" width="6" height="4" rx="1" fill="currentColor" class="text-v-accent"/>
+                </svg>
+                <div class="text-2xl font-extrabold text-v-accent tracking-tighter">Vanroll</div>
+            </div>
+            
+            <div class="hidden md:flex space-x-8 text-sm font-medium">
+                <a href="#features" class="hover:text-v-accent transition duration-150">Features</a>
+                <a href="#use-cases" class="hover:text-v-accent transition duration-150">Use Cases</a>
+            </div>
+            <!-- REMOVED: "Get Started" button -->
+        </nav>
+    </header>
 
+    <main>
+        <!-- Features Section -->
+        <section id="features" class="py-20 bg-v-card-bg border-t border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <!-- Icon removed from here -->
+
+                <!-- Added a main title since the Hero section was removed -->
+                <h1 class="text-5xl font-extrabold text-center mb-4 tracking-tight text-gray-900">
+                    Master the Art of <span class="text-v-accent">Picture-in-Picture</span>
+                </h1>
+                <p class="text-xl text-v-subtle text-center mb-16 max-w-3xl mx-auto">
+                    Vanroll offers two powerful, seamless solutions for professionals. Multitask, present, and create without compromise.
+                </p>
+
+                <!-- Feature 1: Presenter Mode (Webcam over Webpage) -->
+                <!-- UPDATED: Increased spacing to space-y-16 and space-x-16 -->
+                <div class="flex flex-col lg:flex-row items-center justify-between space-y-16 lg:space-y-0 lg:space-x-16 mb-24">
+                    <div class="lg:w-1/2">
+                        <!-- Icon: Presentation -->
+                        <svg class="w-12 h-12 text-v-accent mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1v-3.25M7 17h10M5 19h14M12 9l5 5H7l5-5z"></path></svg>
+                        <h3 class="text-3xl font-bold mb-4 text-gray-900">1. Presenter Mode: Webcam over Webpage</h3>
+                        <p class="text-v-subtle text-lg mb-6">
+                            Transform your presentations and live streams. Keep your face visible and engaged with your audience while navigating complex software, demos, or slides.
+                        </p>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-center">
+                                <span class="text-v-accent mr-2">&check;</span> Professional Streaming
+                            </li>
+                            <li class="flex items-center">
+                                <span class="text-v-accent mr-2">&check;</span> Dynamic Video Calls
+                            </li>
+                            <li class="flex items-center">
+                                <span class="text-v-accent mr-2">&check;</span> Customizable Size and Position
+                            </li>
+                        </ul>
+                        <!-- Launch button updated to point to a new page -->
+                        <a href="presenter-app.html" class="inline-block mt-8 bg-v-accent hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-xl text-lg transition duration-300 shadow-xl transform hover:scale-[1.02]">
+                            Launch Presenter Mode
+                        </a>
+                    </div>
+                    <!-- Visual Example (Placeholder) -->
+                    <div class="lg:w-1/2 bg-gray-100 h-64 rounded-xl border-4 border-v-accent/30 flex items-center justify-center p-6 shadow-xl card-glow">
+                        <p class="text-v-subtle text-lg">Visual Example: Small webcam circle over a full-screen website.</p>
+                    </div>
+                </div>
+
+                <!-- Feature 2: Creator Mode (Webpage over Webcam) -->
+                <!-- UPDATED: Increased spacing to space-y-16 and space-x-16 -->
+                <div class="flex flex-col lg:flex-row-reverse items-center justify-between space-y-16 lg:space-y-0 lg:space-x-16">
+                    <div class="lg:w-1/2">
+                        <!-- Icon: Multitask -->
+                        <svg class="w-12 h-12 text-v-accent mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16"></path></svg>
+                        <h3 class="text-3xl font-bold mb-4 text-gray-900">2. Creator Mode: Webpage over Webcam</h3>
+                        <p class="text-v-subtle text-lg mb-6">
+                            The ultimate multitasking tool. Keep essential information, notes, or a chat window floating over your webcam feed or application. Perfect for transcription, reference, or real-time support.
+                        </p>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-center">
+                                <span class="text-v-accent mr-2">&check;</span> Real-time Reference during calls
+                            </li>
+                            <li class="flex items-center">
+                                <span class="text-v-accent mr-2">&check;</span> Transcription and Note-Taking
+                            </li>
+                            <li class="flex items-center">
+                                <span class="text-v-accent mr-2">&check;</span> Maintain full focus on the main task
+                            </li>
+                        </ul>
+                        <!-- Launch button updated to point to a new page -->
+                        <a href="creator-app.html" class="inline-block mt-8 bg-v-accent hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-xl text-lg transition duration-300 shadow-xl transform hover:scale-[1.02]">
+                            Launch Creator Mode
+                        </a>
+                    </div>
+                    <!-- Visual Example (Placeholder) -->
+                    <div class="lg:w-1/2 bg-gray-100 h-64 rounded-xl border-4 border-v-accent/30 flex items-center justify-center p-6 shadow-xl card-glow">
+                        <p class="text-v-subtle text-lg">Visual Example: Small, transparent webpage window floating over a background application.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Use Cases Section -->
+        <section id="use-cases" class="py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-4xl font-bold text-center mb-16 text-gray-900">Designed for Every Professional</h2>
+                <!-- Adjusted grid to 2 columns and added centering/max-width for better balance -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                    
+                    <!-- Card 1: Educators -->
+                    <div class="bg-v-card-bg p-8 rounded-xl card-glow border border-gray-200 shadow-sm">
+                        <svg class="w-8 h-8 text-v-accent mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12V6M19 12V6M12 14v6"></path></svg>
+                        <h4 class="text-xl font-semibold mb-2 text-gray-900">Educators & Trainers</h4>
+                        <p class="text-v-subtle">
+                            Present complex slides while maintaining a visible connection with students using **Presenter Mode**. Reference teaching notes directly over your presentation in **Creator Mode**.
+                        </p>
+                    </div>
+
+                    <!-- Card 3: Streamers & Creators -->
+                    <div class="bg-v-card-bg p-8 rounded-xl card-glow border border-gray-200 shadow-sm">
+                        <svg class="w-8 h-8 text-v-accent mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.552-2.276A1 1 0 0121 8.79V15.21a1 1 0 01-1.448.866L15 14M8 12h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <h4 class="text-xl font-semibold mb-2 text-gray-900">Streamers & Sales</h4>
+                        <p class="text-v-subtle">
+                            Use **Presenter Mode** for polished product demos. Keep your live chat or CRM open in **Creator Mode** while on a virtual meeting.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Launch/CTA Section: Streamlined to just AdSense banner -->
+        <section id="launch" class="py-20 bg-gray-100">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="text-4xl font-bold mb-4 text-gray-900">Support Vanroll</h2>
+                <p class="text-xl text-v-subtle mb-12">
+                    Vanroll is free to use and supported by non-intrusive advertisements. Thank you for your support!
+                </p>
+
+                <!-- Google AdSense Banner Placeholder -->
+                <div class="w-full max-w-xl mx-auto h-40 bg-gray-200 rounded-xl border-2 border-v-accent/50 flex flex-col items-center justify-center p-4 shadow-xl mb-12">
+                    <p class="text-v-dark-text font-semibold mb-2">Google AdSense Banner (Placeholder)</p>
+                    <p class="text-sm text-v-subtle">Your advertisement will load here.</p>
+                </div>
+
+                <!-- The grid cards were removed as the buttons are now in the features section -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-12 py-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500">
+            <div class="mb-4">
+                <a href="#" class="hover:text-v-accent mx-3">Privacy Policy</a>
+                <span class="text-gray-300">|</span>
+                <a href="#" class="hover:text-v-accent mx-3">Terms of Service</a>
+                <span class="text-gray-300">|</span>
+                <a href="#" class="hover:text-v-accent mx-3">Support</a>
+            </div>
+            <p>&copy; 2025 Vanroll. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
 </html>
