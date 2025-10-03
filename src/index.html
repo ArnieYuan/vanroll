@@ -6,38 +6,10 @@
     <title>Vanroll - Seamless Picture-in-Picture Solutions</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Configure Tailwind to use Inter font and new light colors -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'v-light-bg': '#f8f8f8', // Very light background
-                        'v-card-bg': '#ffffff', // White card backgrounds
-                        'v-dark-text': '#1f2937', // Gray 800 for main text
-                        'v-accent': '#3b82f6', // Blue 500 (Accent - remains the same)
-                        'v-subtle': '#6b7280', // Gray 500 for subtle text
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                }
-            }
-        }
-    </script>
+    <!-- Load custom Tailwind config -->
+    <script src="tailwind.config.js"></script>
     <!-- Load Inter font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        /* Custom styles for professional light theme feel */
-        .card-glow {
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.05); /* Subtle initial shadow */
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        .card-glow:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 30px rgba(59, 130, 246, 0.2); /* Accent shadow on hover */
-        }
-    </style>
 </head>
 <body class="bg-v-light-bg text-v-dark-text font-sans antialiased">
 

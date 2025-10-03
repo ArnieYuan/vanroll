@@ -1,0 +1,87 @@
+/* Define fixed heights for internal components */
+:root {
+    --control-bar-height: 40px;
+}
+
+/* Ensure the body takes up the full viewport height and centers content */
+body {
+    min-height: 100vh;
+}
+
+/* Set default size, enable resizing, and position for floating window */
+#iframeView {
+    /* Default positioning for floating window */
+    position: fixed; /* Use fixed so it stays in place even if the body scrolls */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Center initially */
+    z-index: 1000; /* High z-index to ensure it sits on top of everything */
+
+    /* Default dimensions */
+    width: 600px;
+    height: 400px;
+    /* Enable manual resizing by the user */
+    resize: both;
+    overflow: hidden;
+    /* Ensure it doesn't get too big on small screens */
+    max-width: 95vw;
+    max-height: 95vh;
+
+    /* The children elements will use flex for vertical layout */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Style for the drag handle */
+#dragHandle {
+    cursor: grab; /* Indicates it's draggable */
+    height: var(--control-bar-height); /* Fixed height */
+    flex-shrink: 0;
+}
+
+/* Iframe takes up remaining space (container height minus control bar height) */
+#floatingIframe {
+    width: 100%;
+    height: calc(100% - var(--control-bar-height));
+    flex-grow: 1; /* Takes all available remaining vertical space */
+    border: none;
+}
+
+/* Style the bottom-anchored carousel container */
+#urlCarousel {
+    height: 60px; /* Fixed height for the carousel bar */
+    display: flex; /* Enable horizontal scrolling for the items */
+    align-items: center;
+
+    /* Hide the scrollbar but keep functionality */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+#urlCarousel::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+}
+
+/* Style for the buttons in the carousel */
+.carousel-item {
+    cursor: pointer;
+    padding: 4px 10px;
+    border-radius: 9999px; /* rounded-full */
+    font-size: 0.8rem;
+    margin-right: 8px; /* space-x-2 */
+    transition: background-color 0.15s;
+    flex-shrink: 0; /* Important: prevents items from shrinking when scrolling */
+}
+
+.carousel-item-active {
+    background-color: var(--v-accent);
+    color: white;
+    font-weight: 600;
+}
+.carousel-item-inactive {
+    background-color: #e5e7eb; /* gray-200 */
+    color: var(--v-dark-text);
+}
+.carousel-item:hover:not(.carousel-item-active) {
+    background-color: #d1d5db; /* gray-300 */
+    
+}

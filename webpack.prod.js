@@ -15,9 +15,6 @@ const plugins = [
 ];
 module.exports = merge(baseConfig, {
 	mode: 'production',
-	entry: {
-		vendor: ['lodash'],
-	},
 	output: {
 		path: path.resolve(__dirname, 'dist'),
 		filename: 'js/[name].[chunkhash:16].js',

@@ -1,0 +1,9 @@
+/* Custom styles for professional light theme feel */
+.card-glow {
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.05); /* Subtle initial shadow */
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.card-glow:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 30px rgba(59, 130, 246, 0.2); /* Accent shadow on hover */
+}

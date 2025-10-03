@@ -1,16 +1,30 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const plugins = [
 	new HtmlWebpackPlugin({
 		template: path.resolve(__dirname, 'src/index.html'),
+		chunks: ['main'],
 		filename: "index.html",
 	}),
+	new HtmlWebpackPlugin({
+		template: path.resolve(__dirname, 'src/creator.html'),
+		filename: 'creator.html',
+		// Only include the 'creator' and 'vendor' chunks
+		chunks: ['creator', 'vendor'],
+	}),
+	new CopyWebpackPlugin({
+		patterns: [
+			{ from: 'src/tailwind.config.js', to: 'tailwind.config.js' }
+		]
+	})
 ]
 
 module.exports = {
 	entry: {
 		main: './src/index.ts',
+		creator: './src/creator.ts',
 	},
 	module: {
 		rules: [
@@ -40,21 +54,13 @@ module.exports = {
 						],
 					],
 					plugins: [
-						['import', { libraryName: 'antd', style: true }],
 					],
 				},
 				exclude: /node_modules/,
 			},
 			{
-				test: /\.(css|less)$/,
-				use: ['style-loader', 'css-loader', {
-					loader: "less-loader",
-					options: {
-						lessOptions: {
-							javascriptEnabled: true
-						}
-					}
-				}],
+				test: /\.css$/,
+				use: ['style-loader', 'css-loader'],
 			},
 			{
 				test: /\.(ico|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
