@@ -1,0 +1,1 @@
+tailwind.config={theme:{extend:{colors:{"v-light-bg":"#f8f8f8","v-card-bg":"#ffffff","v-dark-text":"#1f2937","v-accent":"#3b82f6","v-subtle":"#6b7280"},fontFamily:{sans:["Inter","sans-serif"]}}}};
