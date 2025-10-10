@@ -9,6 +9,11 @@ const plugins = [
 		filename: "index.html",
 	}),
 	new HtmlWebpackPlugin({
+		template: path.resolve(__dirname, 'src/presenter.html'),
+		filename: 'presenter.html',
+		chunks: [],
+	}),
+	new HtmlWebpackPlugin({
 		template: path.resolve(__dirname, 'src/creator.html'),
 		filename: 'creator.html',
 		// Only include the 'creator' and 'vendor' chunks
