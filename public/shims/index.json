@@ -1,0 +1,8 @@
+[
+  {
+    "name": "Example Shop",
+    "domain": "example-shop.com",
+    "file": "example-shop.json",
+    "description": "Example shim for an e-commerce site"
+  }
+]

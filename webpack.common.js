@@ -9,19 +9,14 @@ const plugins = [
 		filename: "index.html",
 	}),
 	new HtmlWebpackPlugin({
-		template: path.resolve(__dirname, 'src/presenter.html'),
-		filename: 'presenter.html',
-		chunks: [],
-	}),
-	new HtmlWebpackPlugin({
-		template: path.resolve(__dirname, 'src/creator.html'),
-		filename: 'creator.html',
-		// Only include the 'creator' and 'vendor' chunks
-		chunks: ['creator', 'vendor'],
+		template: path.resolve(__dirname, 'src/shims.html'),
+		filename: 'shims.html',
+		chunks: ['shims', 'vendor'],
 	}),
 	new CopyWebpackPlugin({
 		patterns: [
-			{ from: 'src/tailwind.config.js', to: 'tailwind.config.js' }
+			{ from: 'src/tailwind.config.js', to: 'tailwind.config.js' },
+			{ from: 'public', to: 'public' }
 		]
 	})
 ]
@@ -29,7 +24,7 @@ const plugins = [
 module.exports = {
 	entry: {
 		main: './src/index.ts',
-		creator: './src/creator.ts',
+		shims: './src/shims.ts',
 	},
 	module: {
 		rules: [
