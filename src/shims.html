@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vanroll - Shim Directory</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load custom Tailwind config -->
+    <script src="tailwind.config.js"></script>
+    <!-- Load Inter font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="bg-v-light-bg text-v-dark-text font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- Navigation Bar -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-lg text-v-dark-text border-b border-gray-200">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <a href="index.html" class="flex items-center space-x-2">
+                <svg class="w-6 h-6 text-v-accent" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.5" class="text-v-subtle"/>
+                    <rect x="13" y="14" width="6" height="4" rx="1" fill="currentColor" class="text-v-accent"/>
+                </svg>
+                <div class="text-2xl font-extrabold text-v-accent tracking-tighter">Vanroll</div>
+            </a>
+
+            <div class="hidden md:flex space-x-8 text-sm font-medium">
+                <a href="index.html#architecture" class="hover:text-v-accent transition duration-150">Architecture</a>
+                <a href="index.html#use-cases" class="hover:text-v-accent transition duration-150">Freelance Use Cases</a>
+                <a href="shims.html" class="hover:text-v-accent transition duration-150 text-v-accent font-bold">Shim Directory</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="flex-grow">
+        <section class="py-12 bg-white border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h1 class="text-4xl font-extrabold mb-4 tracking-tight text-gray-900">Shim Directory</h1>
+                <p class="text-lg text-v-subtle max-w-3xl mx-auto">
+                    Browse the repository of open-source JSON Shims. These shims map user intentions to DOM manipulations for specific domains, enabling secure browser automation.
+                </p>
+            </div>
+        </section>
+
+        <section class="py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Loading State -->
+                <div id="loading-state" class="text-center py-10">
+                    <p class="text-v-subtle text-lg animate-pulse">Loading shims...</p>
+                </div>
+
+                <!-- Error State -->
+                <div id="error-state" class="hidden text-center py-10 text-red-600 bg-red-50 rounded-xl border border-red-200 p-6">
+                    <p class="text-lg font-semibold mb-2">Failed to load shims.</p>
+                    <p id="error-message" class="text-sm"></p>
+                </div>
+
+                <!-- Shims Grid -->
+                <div id="shims-grid" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Cards will be injected here via JS -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 py-10 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500">
+            <p>&copy; 2026 Vanroll. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
