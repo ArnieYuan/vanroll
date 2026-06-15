@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function loadShims() {
     try {
-      const response = await fetch('/public/shims/index.json');
+      const response = await fetch('./shims/index.json');
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
