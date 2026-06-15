@@ -16,7 +16,7 @@ const plugins = [
 	new CopyWebpackPlugin({
 		patterns: [
 			{ from: 'src/tailwind.config.js', to: 'tailwind.config.js' },
-			{ from: 'public', to: 'public' }
+			{ from: 'public', to: '.' }
 		]
 	})
 ]

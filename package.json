@@ -10,13 +10,11 @@
 	],
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"build": "npm run clean && webpack --config webpack.prod.js",
+		"build": "webpack --config webpack.prod.js",
 		"start": "npm install && npm run start:dev",
 		"start:dev": "webpack serve --open --config webpack.dev.js",
 		"serve": "http-server dist -p 4001",
-		"ghpages": "npm run clean && webpack --config webpack.ghpages.js && node scripts/ghpages",
 		"lint": "npm run tsc",
-		"clean": "node scripts/clean",
 		"tsc": "tsc"
 	},
 	"repository": {
@@ -46,13 +44,10 @@
 		"copy-webpack-plugin": "^13.0.1",
 		"core-js": "^3.45.1",
 		"css-loader": "^7.1.2",
-		"del": "^8.0.1",
 		"eslint": "^9.36.0",
 		"eslint-loader": "^4.0.2",
 		"eslint-plugin-import": "^2.32.0",
 		"file-loader": "^6.2.0",
-		"fs-extra": "^11.3.2",
-		"gh-pages": "^6.3.0",
 		"html-webpack-plugin": "^5.6.4",
 		"path": "^0.12.7",
 		"style-loader": "^4.0.0",
